@@ -101,9 +101,36 @@ const CodeRenderer = memo(({ code, lang, revealed = Infinity }: { code: string; 
             {i + 1}
           </span>
           <span className="table-cell pr-4">
-            {line.split(/(\s+|[{}()[\],:;'"=])/g).map((token, j) => {
-              const start = offset;
-              offset += token.length;
+            {(() => {
+              const lineStart = offset;
+              offset += line.length + 1; // + newline
+              const typedHere = Math.max(0, Math.min(line.length, revealed - lineStart));
+              let pos = lineStart;
+              const tokens = line
+                .slice(0, typedHere)
+                .split(/(\s+|[{}()[\],:;'"=])/g)
+                .map((token, j) => {
+                  const start = pos;
+                  pos += token.length;
+                  return colorToken(token, j, line, start);
+                });
+              // Everything not typed yet is one plain ghost run per line: it is in the HTML from the
+              // first paint (a large, static text block), and the typing simply brightens it.
+              return (
+                <>
+                  {tokens}
+                  {typedHere < line.length ? <span className="code-ghost">{line.slice(typedHere)}</span> : null}
+                </>
+              );
+            })()}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function colorToken(token: string, j: number, line: string, _start: number) {
               let color = "var(--vs-fg)";
               if (lang === "ts") {
                 if (TS_KEYWORDS.includes(token)) color = "var(--vs-kw)";
@@ -124,27 +151,12 @@ const CodeRenderer = memo(({ code, lang, revealed = Infinity }: { code: string; 
                 if (token.startsWith("#")) color = "var(--vs-kw)";
                 else if (token.startsWith("**")) color = "var(--vs-str)";
               }
-              if (start + token.length <= revealed) {
-                return (
-                  <span key={j} style={{ color }}>
-                    {token}
-                  </span>
-                );
-              }
-              const cut = Math.max(0, revealed - start);
               return (
                 <span key={j} style={{ color }}>
-                  {cut > 0 ? token.slice(0, cut) : null}
-                  <span className="code-ghost">{token.slice(cut)}</span>
+                  {token}
                 </span>
               );
-            })}
-            {void (offset += 1) /* the newline */}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
+  }
 });
 CodeRenderer.displayName = "CodeRenderer";
 
@@ -572,9 +584,7 @@ export default function Hero(props: HeroProps) {
                 onClick={handleDeploymentAction}
                 className="bg-[#007acc] text-[#fff] px-4 md:px-6 py-3 min-h-11 rounded-lg shadow-xl flex items-center justify-center gap-2 text-[11px] md:text-xs font-bold tracking-wide hover:bg-[#006bb3] cursor-pointer border border-white/5 transition-all w-full md:w-auto"
               >
-                <Download size={14} strokeWidth={2.5} aria-hidden />
-                {/* CSS content: a late pop-up, kept out of the page's main-paint (LCP) measurement */}
-                <span aria-label="Deployment complete. Download resume." className="before:content-['Deployment_Complete._Download_Resume.']" />
+                <Download size={14} strokeWidth={2.5} /> Deployment Complete. Download Resume.
               </motion.button>
             </motion.div>
           )}
@@ -612,16 +622,14 @@ export default function Hero(props: HeroProps) {
                     key={i}
                     initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
-                    // Drawn via CSS content: these lines appear seconds after load and must not count as the page's main paint (LCP).
-                    data-line={log}
-                    aria-label={log}
-                    className={`mt-1 min-h-[1lh] before:content-[attr(data-line)] ${log.includes("✓") || log.includes("successfully") ? "text-[var(--vs-ok)]" : "text-[var(--vs-text)]"}`}
-                  />
+                    className={`mt-1 ${log.includes("✓") || log.includes("successfully") ? "text-[var(--vs-ok)]" : "text-[var(--vs-text)]"}`}
+                  >
+                    {log}
+                  </motion.div>
                 ))}
                 {buildStep === 2 && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-[var(--vs-ok)] font-bold">
-                    <span className="before:content-['Done_in_1.82s._']" aria-label="Done in 1.82s." />
-                    <span className="text-white animate-pulse font-normal">_</span>
+                    Done in 1.82s. <span className="text-white animate-pulse font-normal">_</span>
                   </motion.div>
                 )}
               </div>

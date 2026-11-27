@@ -163,10 +163,9 @@ export function ModeSwitch() {
                     className="fixed z-[75] flex max-w-[calc(100vw-24px)] items-center gap-2 rounded-2xl bg-[#1d1d1f] py-2.5 pr-2.5 pl-4 text-left text-[13px] font-medium text-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.45)]"
                   >
                     <span aria-hidden className="absolute -top-1.5 right-10 h-3 w-3 rotate-45 rounded-[2px] bg-[#1d1d1f]" />
-                    {/* Text drawn with CSS content so this late pop-up never counts as the page's main paint (LCP). */}
-                    <span className="relative" aria-label="New: see my films and photography">
-                      <span aria-hidden className="mr-1.5 rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black before:content-['New']" />
-                      <span aria-hidden className="before:content-['See_my_films_&_photography_→']" />
+                    <span className="relative">
+                      <span className="mr-1.5 rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black">New</span>
+                      See my films &amp; photography →
                     </span>
                     <span
                       role="button"
