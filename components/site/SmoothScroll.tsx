@@ -36,12 +36,15 @@ export default function SmoothScroll() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const lenis = new Lenis({
-      lerp: reduce ? 0.12 : 0.08,
+      lerp: reduce ? 0.07 : 0.06,
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.9,
+      syncTouch: true,
+      syncTouchLerp: 0.06,
+      touchInertiaExponent: 1.7,
+      touchMultiplier: 1.2,
       infinite: false,
       autoRaf: false,
       anchors: { offset: -84 },
