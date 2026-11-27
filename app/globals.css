@@ -2,55 +2,57 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ---------- Design tokens ---------- */
+/* =====================================================================
+   Admin tokens (the admin panel uses these)
+   ===================================================================== */
 :root {
-  --brand: #b2532e; /* overwritten from admin theme settings */
-  --brand-2: #4f6f52;
+  --brand: #007acc;
+  --brand-2: #10b981;
 
-  --bg: #f7f3ed;
-  --bg-2: #efe7dc;
-  --fg: #1d1915;
-  --muted: #574e45;
-  --subtle: #6f655b;
-  --line: rgba(70, 50, 30, 0.12);
+  --bg: #f6f8fc;
+  --bg-2: #e8edf5;
+  --fg: #0b1220;
+  --muted: #475569;
+  --subtle: #5b6779;
+  --line: rgba(15, 23, 42, 0.1);
   --accent: var(--brand);
   --accent-2: var(--brand-2);
   --accent-ink: #ffffff;
   --accent-soft: color-mix(in oklab, var(--brand) 12%, transparent);
 
-  --glass: rgba(255, 252, 248, 0.58);
-  --glass-strong: rgba(255, 252, 248, 0.78);
-  --glass-edge: rgba(255, 255, 255, 0.75);
-  --glass-shadow: 0 1px 2px rgba(60, 40, 20, 0.04), 0 12px 32px -12px rgba(80, 50, 20, 0.18);
+  --glass: rgba(255, 255, 255, 0.62);
+  --glass-strong: rgba(255, 255, 255, 0.82);
+  --glass-edge: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px -12px rgba(15, 23, 42, 0.18);
 
-  --blob-1: rgba(236, 160, 116, 0.62);
-  --blob-2: rgba(160, 192, 150, 0.6);
-  --blob-3: rgba(166, 194, 222, 0.55);
-  --blob-4: rgba(244, 206, 136, 0.55);
+  --blob-1: rgba(0, 122, 204, 0.16);
+  --blob-2: rgba(99, 102, 241, 0.14);
+  --blob-3: rgba(16, 185, 129, 0.1);
+  --blob-4: rgba(56, 189, 248, 0.12);
   color-scheme: light;
 }
 
 [data-theme="dark"] {
-  --bg: #171411;
-  --bg-2: #201c18;
-  --fg: #f3ede5;
-  --muted: #c2b6a8;
-  --subtle: #a89c8f;
-  --line: rgba(255, 240, 220, 0.1);
-  --accent: color-mix(in oklab, var(--brand) 62%, #fff3e8);
-  --accent-2: color-mix(in oklab, var(--brand-2) 60%, #f0f5ee);
-  --accent-ink: #1a1410;
+  --bg: #02091a;
+  --bg-2: #0a1428;
+  --fg: #ededed;
+  --muted: #aab3c5;
+  --subtle: #8a94a8;
+  --line: rgba(255, 255, 255, 0.1);
+  --accent: color-mix(in oklab, var(--brand) 80%, #fff);
+  --accent-2: var(--brand-2);
+  --accent-ink: #ffffff;
   --accent-soft: color-mix(in oklab, var(--brand) 22%, transparent);
 
-  --glass: rgba(40, 34, 29, 0.55);
-  --glass-strong: rgba(44, 38, 32, 0.8);
-  --glass-edge: rgba(255, 240, 220, 0.09);
-  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 16px 40px -16px rgba(0, 0, 0, 0.6);
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-strong: rgba(14, 22, 40, 0.85);
+  --glass-edge: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -16px rgba(0, 0, 0, 0.7);
 
-  --blob-1: rgba(178, 83, 46, 0.28);
-  --blob-2: rgba(79, 111, 82, 0.3);
-  --blob-3: rgba(70, 95, 125, 0.25);
-  --blob-4: rgba(150, 110, 50, 0.22);
+  --blob-1: rgba(0, 122, 204, 0.18);
+  --blob-2: rgba(99, 102, 241, 0.14);
+  --blob-3: rgba(16, 185, 129, 0.08);
+  --blob-4: rgba(56, 189, 248, 0.08);
   color-scheme: dark;
 }
 
@@ -65,28 +67,213 @@
   --color-accent-2: var(--accent-2);
   --color-accent-ink: var(--accent-ink);
   --color-accent-soft: var(--accent-soft);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-display), ui-serif, Georgia, serif;
 }
 
-/* ---------- Base ---------- */
+/* =====================================================================
+   Public site: the original portfolio look.
+   Dark = the old site exactly. Light = the same design on a light canvas.
+   "white"/"black" utilities follow the theme so every card and border flips.
+   ===================================================================== */
+.site,
+html[data-theme] .site .force-dark {
+  --background: #02091a;
+  --foreground: #ededed;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* VS Code (Dark+) */
+  --vs-bg: #02091a;
+  --vs-panel: #252526;
+  --vs-terminal: #1e1e1e;
+  --vs-terminal-bar: #181818;
+  --vs-fg: #d4d4d4;
+  --vs-text: #cccccc;
+  --vs-dim: #858585;
+  --vs-line: #6e7681;
+  --vs-line-hover: #c6c6c6;
+  --vs-kw: #569cd6;
+  --vs-type: #4ec9b0;
+  --vs-str: #ce9178;
+  --vs-num: #b5cea8;
+  --vs-prop: #9cdcfe;
+  --vs-sel: #d7ba7d;
+  --vs-btn: #3c3c3c;
+  --vs-ts: #3178c6;
+  --vs-ok: #4ec9b0;
+  color-scheme: dark;
+}
+
+html[data-theme="light"] .site {
+  --background: #f6f8fc;
+  --foreground: #0b1220;
+  --color-white: #0b1220;
+  --color-black: #ffffff;
+
+  /* VS Code (Light+) */
+  --vs-bg: #f6f8fc;
+  --vs-panel: #f3f3f3;
+  --vs-terminal: #ffffff;
+  --vs-terminal-bar: #f3f3f3;
+  --vs-fg: #1f2328;
+  --vs-text: #3b3b3b;
+  --vs-dim: #6e6e6e;
+  --vs-line: #8b949e;
+  --vs-line-hover: #1f2328;
+  --vs-kw: #0000ff;
+  --vs-type: #267f99;
+  --vs-str: #a31515;
+  --vs-num: #098658;
+  --vs-prop: #001080;
+  --vs-sel: #800000;
+  --vs-btn: #e5e5e5;
+  --vs-ts: #3178c6;
+  --vs-ok: #0f7b5f;
+  color-scheme: light;
+}
+
+.site {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100dvh;
+}
+/* The original site rendered its "mono" and "sans" text in the body font. */
+.site .font-sans,
+.site .font-mono {
+  font-family: inherit;
+}
+.site .font-serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+/* Light-mode tune-ups for accent text that was tuned for a dark background */
+html[data-theme="light"] .site .text-purple-300,
+html[data-theme="light"] .site .text-purple-300\/80 {
+  color: #6d28d9;
+}
+html[data-theme="light"] .site .text-indigo-300\/70,
+html[data-theme="light"] .site .text-indigo-400\/70 {
+  color: #4338ca;
+}
+html[data-theme="light"] .site .text-emerald-500 {
+  color: #047857;
+}
+html[data-theme="light"] .site .group:hover .group-hover\:text-emerald-400 {
+  color: #047857;
+}
+
+/* Films section greys, tuned for the light canvas */
+html[data-theme="light"] .site .text-neutral-400 {
+  color: #525252;
+}
+html[data-theme="light"] .site .text-neutral-500 {
+  color: #525252;
+}
+html[data-theme="light"] .site .text-neutral-700 {
+  color: #737373;
+}
+html[data-theme="light"] .site .bg-neutral-800 {
+  background-color: #a3a3a3;
+}
+html[data-theme="light"] .site .film-accent {
+  filter: brightness(0.82) saturate(1.35);
+}
+html[data-theme="light"] .site .shadow-black\/50 {
+  --tw-shadow-color: rgba(15, 23, 42, 0.08);
+}
+/* Keep a block in the dark palette in both themes (video frames, overlays) */
+.site .force-dark {
+  color-scheme: dark;
+}
+
+/* Cinematic text reveals (from the original films section) */
+@keyframes fade-in-slow {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes cinematic-up {
+  0% { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(4px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes cinematic-fade {
+  0% { opacity: 0; filter: blur(2px); }
+  100% { opacity: 1; filter: blur(0); }
+}
+@keyframes cinematic-grow {
+  0% { opacity: 0; height: 0px; }
+  100% { opacity: 1; height: 64px; }
+}
+.animate-fade-in { animation: fade-in-slow 1.5s ease-out forwards; }
+.animate-cinematic-up { animation: cinematic-up 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-cinematic-fade { animation: cinematic-fade 2s ease-in-out forwards; }
+.animate-cinematic-grow { animation: cinematic-grow 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+/* Anchor targets clear the floating header */
+.site section[id] {
+  scroll-margin-top: 84px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.perspective-1000 {
+  perspective: 1000px;
+}
+.animate-spin-slow {
+  animation: spin 6s linear infinite;
+}
+
+/* --- Lenis smooth scroll --- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* --- Theme switch: circular reveal (View Transitions API) --- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* =====================================================================
+   Base
+   ===================================================================== */
 html {
   background: var(--bg);
   color: var(--fg);
   -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
 }
 body {
   font-family: var(--font-sans);
   background: var(--bg);
   min-height: 100dvh;
   overflow-x: clip;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-}
-::selection {
-  background: color-mix(in oklab, var(--accent) 25%, transparent);
 }
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -94,37 +281,30 @@ body {
   border-radius: 6px;
 }
 
-h1,
-h2,
-h3 {
+/* ---------- Admin helpers ---------- */
+.admin h1,
+.admin h2,
+.admin h3 {
   font-family: var(--font-serif);
   letter-spacing: -0.015em;
-  font-optical-sizing: auto;
 }
-
-/* ---------- Glass ---------- */
 .glass {
   background: var(--glass);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   backdrop-filter: blur(18px) saturate(140%);
   border: 1px solid var(--glass-edge);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
     var(--glass-shadow);
 }
 [data-theme="dark"] .glass {
   box-shadow:
-    inset 0 1px 0 rgba(255, 240, 220, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
     var(--glass-shadow);
 }
 .glass-strong {
   background: var(--glass-strong);
 }
-.hairline {
-  border: 1px solid var(--line);
-}
-
-/* ---------- Organic background ---------- */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -136,15 +316,13 @@ h3 {
 .backdrop span {
   position: absolute;
   border-radius: 9999px;
-  will-change: transform;
 }
 .backdrop .b1 {
-  width: 62vmax;
-  height: 62vmax;
+  width: 60vmax;
+  height: 60vmax;
   left: -18vmax;
   top: -22vmax;
   background: radial-gradient(closest-side, var(--blob-1), transparent);
-  animation: drift1 38s ease-in-out infinite alternate;
 }
 .backdrop .b2 {
   width: 55vmax;
@@ -152,7 +330,6 @@ h3 {
   right: -20vmax;
   top: 8vh;
   background: radial-gradient(closest-side, var(--blob-2), transparent);
-  animation: drift2 44s ease-in-out infinite alternate;
 }
 .backdrop .b3 {
   width: 50vmax;
@@ -160,46 +337,10 @@ h3 {
   left: 10vw;
   bottom: -28vmax;
   background: radial-gradient(closest-side, var(--blob-3), transparent);
-  animation: drift3 50s ease-in-out infinite alternate;
 }
 .backdrop .b4 {
-  width: 34vmax;
-  height: 34vmax;
-  right: 12vw;
-  bottom: 6vh;
-  background: radial-gradient(closest-side, var(--blob-4), transparent);
-  animation: drift1 46s ease-in-out infinite alternate-reverse;
+  display: none;
 }
-/* Fine paper grain so flat areas don't look digital */
-.backdrop::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.35;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-[data-theme="dark"] .backdrop::after {
-  mix-blend-mode: screen;
-  opacity: 0.15;
-}
-@keyframes drift1 {
-  to {
-    transform: translate3d(8vw, 6vh, 0) scale(1.08);
-  }
-}
-@keyframes drift2 {
-  to {
-    transform: translate3d(-10vw, 10vh, 0) scale(0.94);
-  }
-}
-@keyframes drift3 {
-  to {
-    transform: translate3d(6vw, -8vh, 0) scale(1.1);
-  }
-}
-
-/* ---------- Small helpers ---------- */
 .eyebrow {
   font-size: 0.78rem;
   letter-spacing: 0.14em;
@@ -219,28 +360,8 @@ h3 {
   background: color-mix(in oklab, var(--glass-strong) 80%, transparent);
   border: 1px solid var(--line);
 }
-.link-underline {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1px;
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  transition: background-size 0.25s ease;
-}
-.link-underline:hover {
-  background-size: 100% 1px;
-}
-.no-scrollbar {
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
 
-/* ---------- Motion preferences ---------- */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {

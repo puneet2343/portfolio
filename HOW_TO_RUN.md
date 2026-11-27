@@ -20,11 +20,13 @@ To stop the site, press `Ctrl + C` in the terminal.
 - Go to `/admin` and sign in with the username and password from your environment variables
   (`ADMIN_USERNAME`, `ADMIN_PASSWORD`). Locally they're in `.env.local`, which is never committed.
 - After 5 wrong attempts from the same network, login is locked for 15 minutes.
-- In the admin you can edit everything: hero text, About, Work, Projects (with case-study pages),
-  Skills, Education, Events photos, Films, Contact, Social links, the order and visibility of
-  sections, the resume PDF, SEO text and the accent colour. The eye icon hides an item without
-  deleting it. Messages from the contact form appear under **Messages**. The Dashboard shows
-  page views (counted on this site only, with no cookies and no third-party trackers).
+- In the admin you can edit everything: the hero code editor (developer.ts lines, README.md and
+  styles.css tabs), The Journey (work + education cards), Skills and their filter tabs, Projects (each
+  has a case-study page), Films (title, text, colour, order, show/hide, video + poster upload: videos
+  go straight from the browser to Vercel Blob, up to 200 MB), Events photos, Contact, Social links,
+  the order and visibility of sections, the resume PDF, SEO and the default theme (system / dark / light).
+  The eye icon hides an item without deleting it. Messages from the contact form appear under
+  **Messages**. The Dashboard shows page views (no cookies, no third-party trackers).
 - Changes show on the live site on the next visit after saving.
 
 ## Where data lives
@@ -52,6 +54,13 @@ See `.env.example`. In Vercel: Project → Settings → Environment Variables.
 | `NEXT_PUBLIC_SITE_URL` | no | Public URL for sitemap and link previews (or set it in Admin → SEO) |
 
 To get the latest variables from Vercel onto this PC: `npx vercel env pull .env.local --yes`.
+
+## Design
+
+The public site is the original portfolio (VS Code hero, The Journey, Engineering Ecosystem,
+My Projects, Filmmaking & Cinematography) rebuilt from its source, plus a floating glass header,
+light/dark themes, Lenis smooth scrolling, Events and Contact. Film videos live in `public/videos`
+(posters are the `.webp` files next to them).
 
 ## Seeding the database
 

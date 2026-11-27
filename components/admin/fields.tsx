@@ -200,18 +200,34 @@ export function MediaInput({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  accept?: "image" | "pdf";
+  accept?: "image" | "pdf" | "video";
   help?: string;
 }) {
   const id = useId();
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [pct, setPct] = useState<number | null>(null);
   const { storage, toast } = useAdmin();
   const canUpload = storage?.uploads ?? false;
 
   async function upload(file: File) {
     setBusy(true);
     try {
+      if (accept === "video") {
+        // Large files go straight from the browser to Vercel Blob (token issued by /api/admin/blob).
+        const { upload: blobUpload } = await import("@vercel/blob/client");
+        const safe = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").slice(-60);
+        const res = await blobUpload(`portfolio/films/${safe}`, file, {
+          access: "public",
+          handleUploadUrl: "/api/admin/blob",
+          contentType: file.type || "video/webm",
+          multipart: file.size > 20 * 1024 * 1024,
+          onUploadProgress: (e) => setPct(Math.round(e.percentage)),
+        });
+        onChange(res.url);
+        toast("Video uploaded. Remember to save.");
+        return;
+      }
       const fd = new FormData();
       fd.append("file", file);
       fd.append("accept", accept);
@@ -222,6 +238,7 @@ export function MediaInput({
       toast(e instanceof Error ? e.message : "Upload failed.", "error");
     } finally {
       setBusy(false);
+      setPct(null);
       if (fileRef.current) fileRef.current.value = "";
     }
   }
@@ -231,7 +248,9 @@ export function MediaInput({
       <Label htmlFor={id} label={label} help={help} />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         {value ? (
-          accept === "image" ? (
+          accept === "video" ? (
+            <video src={value} muted playsInline preload="metadata" className="h-16 w-24 shrink-0 rounded-xl border border-line bg-black object-cover" />
+          ) : accept === "image" ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={value} alt="" className="h-16 w-16 shrink-0 rounded-xl border border-line object-cover" />
           ) : (
@@ -240,11 +259,11 @@ export function MediaInput({
             </a>
           )
         ) : null}
-        <input id={id} value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={accept === "pdf" ? "/resume/file.pdf or https://…" : "/images/… or https://…"} className={inputCls} />
+        <input id={id} value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={accept === "pdf" ? "/resume/file.pdf or https://…" : accept === "video" ? "/videos/… or https://…" : "/images/… or https://…"} className={inputCls} />
         <input
           ref={fileRef}
           type="file"
-          accept={accept === "pdf" ? "application/pdf" : "image/png,image/jpeg,image/webp,image/gif,image/avif"}
+          accept={accept === "pdf" ? "application/pdf" : accept === "video" ? "video/webm,video/mp4,video/quicktime" : "image/png,image/jpeg,image/webp,image/gif,image/avif"}
           className="hidden"
           onChange={(e) => {
             const f = e.target.files?.[0];
@@ -259,7 +278,7 @@ export function MediaInput({
           className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-line px-4 text-sm font-medium transition hover:bg-[var(--glass-strong)] disabled:opacity-50"
         >
           {busy ? <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden /> : <Upload className="h-4 w-4" aria-hidden />}
-          Upload
+          {pct !== null ? `${pct}%` : "Upload"}
         </button>
       </div>
     </div>

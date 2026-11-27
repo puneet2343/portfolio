@@ -1,15 +1,16 @@
 import { seedContent } from "../seed";
-import type { SiteContent, ViewStats } from "../types";
+import { CONTENT_VERSION, type SiteContent, type ViewStats } from "../types";
 
 /** Merge stored content over the seed so newly added fields always have defaults. */
 export function withDefaults(stored: Partial<SiteContent> | null | undefined): SiteContent {
-  const s = stored ?? {};
   const seed = structuredClone(seedContent);
+  const s = migrate(stored ?? {}, seed);
   return {
     ...seed,
     ...s,
     profile: { ...seed.profile, ...(s.profile ?? {}) },
     about: { ...seed.about, ...(s.about ?? {}) },
+    hero: { ...seed.hero, ...(s.hero ?? {}) },
     events: { ...seed.events, ...(s.events ?? {}) },
     beyond: { ...seed.beyond, ...(s.beyond ?? {}) },
     seo: { ...seed.seo, ...(s.seo ?? {}) },
@@ -17,6 +18,24 @@ export function withDefaults(stored: Partial<SiteContent> | null | undefined): S
     contact: { ...seed.contact, ...(s.contact ?? {}) },
     sections: mergeSections(seed.sections, s.sections),
   } as SiteContent;
+}
+
+/**
+ * Content saved before the old-portfolio redesign (version < 2) has a different shape for the
+ * timeline, skills, films and hero. Use the seed for everything, but keep extra event photos
+ * (e.g. the hidden ones uploaded to Blob) and an uploaded resume.
+ */
+export function migrate(stored: Partial<SiteContent>, seed: SiteContent): Partial<SiteContent> {
+  if (!stored || Object.keys(stored).length === 0) return {};
+  if (stored.version === CONTENT_VERSION) return stored;
+  const extraPhotos = (stored.events?.photos ?? []).filter((p) => p?.id && !seed.events.photos.some((x) => x.id === p.id));
+  const resumeUrl = stored.profile?.resumeUrl;
+  return {
+    ...structuredClone(seed),
+    profile: { ...seed.profile, ...(resumeUrl ? { resumeUrl } : {}) },
+    events: { ...seed.events, photos: [...seed.events.photos, ...extraPhotos] },
+    version: CONTENT_VERSION,
+  };
 }
 
 function mergeSections(seed: SiteContent["sections"], stored?: SiteContent["sections"]) {

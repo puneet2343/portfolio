@@ -7,7 +7,7 @@ import type { SiteContent } from "./types";
 export const seedContent: SiteContent = {
   profile: {
     name: "Puneet Shukla",
-    role: "Full-Stack Software Developer",
+    role: "Software Engineer (SDE-1)",
     company: "SS Innovations International",
     location: "Gurugram, India",
     badge: "SDE-1 · Surgical robotics",
@@ -42,104 +42,41 @@ export const seedContent: SiteContent = {
       id: "exp-ssi",
       company: "SS Innovations International",
       role: "Software Development Engineer I (SDE-1)",
+      type: "Full-time",
       start: "Apr 2025",
       end: "Present",
-      location: "Gurugram, Haryana",
+      location: "Gurugram, India",
       logo: "/images/logos/ssi.jpeg",
       summary:
-        "Building web platforms and internal tools for a surgical-robotics company, from event ticketing to team automation and public websites.",
-      items: [
-        {
-          title: "SSI Events: event registration & ticketing platform",
-          tech: ["Next.js", "TypeScript", "MongoDB", "Socket.IO", "AWS"],
-          points: [
-            "Built the company's event platform for surgical conferences: event catalogue, slot-based booking and QR tickets.",
-            "Prevented double bookings and overselling using retry IDs and MongoDB transactions on every booking request.",
-            "Built QR check-in with an in-browser scanner that validates the booked slot and pushes attendance via Socket.IO.",
-            "Built the admin console: role-based access, activity logs, analytics and reports exported to CSV, Excel and PDF.",
-            "On AWS Lambda and DynamoDB, added live bus tracking on Google Maps and automated feedback emails.",
-          ],
-        },
-        {
-          title: "SSI Studios: internal team workspace",
-          tech: ["Next.js", "TypeScript", "MongoDB", "pdf-lib", "ffmpeg.wasm"],
-          points: [
-            "Built a training-certificate manager with Excel import, one-click PDF certificates, export and a live dashboard.",
-            "Built in-browser image, video and document converters and a QR generator, behind signed session-cookie login.",
-          ],
-        },
-        {
-          title: "SS Innovations, SSI CRS & SMRSC websites",
-          tech: ["Next.js", "React", "Tailwind CSS", "Three.js"],
-          points: [
-            "Built the SS Innovations corporate website with 3D product visuals of the SSi Mantra robot using Three.js.",
-            "Built the SSI CRS training program and SMRSC conference websites: fast, responsive and SEO-optimized.",
-          ],
-        },
-        {
-          title: "Instrument jaw angle measurement",
-          tech: ["Python", "NDI tracking"],
-          points: [
-            "Worked on real-time angle detection between the jaws of the instrument jaw module using NDI sensors.",
-          ],
-        },
+        "I build the web platforms and internal tools of a surgical-robotics company: event ticketing, training sites, conference platforms and team automation.",
+      points: [
+        "Built SSI Events, the company's event platform for surgical conferences: slot-based booking, QR tickets and QR check-in with live attendance over Socket.IO.",
+        "Stopped double bookings and overselling with retry IDs and MongoDB transactions on every booking request.",
+        "Built SSI Studios, an internal workspace for certificates, ID cards, PDFs and media converters, behind signed session-cookie login.",
+        "Built the SS Innovations corporate site (3D SSi Mantra visuals in Three.js), the SSI CRS training site and the SMRSC conference platform.",
       ],
-      tech: ["Next.js", "TypeScript", "MongoDB", "Socket.IO", "AWS", "Three.js", "Python"],
+      tech: ["Next.js", "TypeScript", "MongoDB", "Socket.IO", "AWS", "Three.js"],
       published: true,
     },
     {
       id: "exp-medanta",
       company: "Medanta The Medicity",
       role: "Intern",
+      type: "Internship",
       start: "Jun 2023",
       end: "Aug 2023",
-      location: "Gurugram, Haryana",
+      location: "Gurugram, India",
       logo: "/images/logos/medanta.png",
       summary: "Quality assurance on the hospital website and patient registration flows.",
-      items: [
-        {
-          title: "Web QA: hospital website & patient registration",
-          tech: ["Manual testing", "Functional testing"],
-          points: [
-            "Tested the hospital website and patient registration flows, catching validation errors, broken links and UI bugs.",
-            "Logged defects with reproduction steps and severity, and re-tested fixes with developers before each release.",
-          ],
-        },
+      points: [
+        "Tested the hospital website and patient registration flows, catching validation errors, broken links and UI bugs.",
+        "Logged defects with reproduction steps and severity, and re-tested fixes with developers before each release.",
       ],
-      tech: ["Manual testing", "Functional testing"],
+      tech: ["Manual Testing", "Functional Testing", "QA"],
       published: true,
     },
   ],
   projects: [
-    {
-      id: "prj-events",
-      slug: "ssi-events",
-      title: "SSI Events",
-      tagline: "Event registration & ticketing platform for surgical conferences.",
-      context: "SS Innovations International",
-      period: "",
-      cover: "",
-      gallery: [],
-      liveUrl: "",
-      repoUrl: "",
-      tech: ["Next.js", "TypeScript", "MongoDB", "Socket.IO", "AWS Lambda", "DynamoDB", "Google Maps API"],
-      problem:
-        "Surgical conferences need attendees to book limited slots, receive tickets and check in on the day, without double bookings or overselling, and organisers need live attendance and reports.",
-      built: [
-        "Event catalogue with slot-based booking and QR tickets.",
-        "Booking safety: retry IDs and MongoDB transactions on every booking request.",
-        "QR check-in with an in-browser scanner that validates the booked slot and pushes attendance live via Socket.IO.",
-        "Admin console with role-based access, activity logs, analytics and CSV / Excel / PDF report exports.",
-        "Live bus tracking on Google Maps and automated feedback emails, running on AWS Lambda and DynamoDB.",
-      ],
-      impact: [
-        "No double bookings or overselling: every booking request runs inside a MongoDB transaction with a retry ID.",
-        "Check-in is a single QR scan, and attendance appears live for organisers.",
-        "Organisers export reports themselves in CSV, Excel or PDF.",
-      ],
-      featured: true,
-      published: true,
-    },
     {
       id: "prj-studios",
       slug: "ssi-studios",
@@ -221,27 +158,6 @@ export const seedContent: SiteContent = {
       published: true,
     },
     {
-      id: "prj-corporate",
-      slug: "ss-innovations-website",
-      title: "SS Innovations corporate website",
-      tagline: "Corporate website with 3D product visuals of the SSi Mantra robot.",
-      context: "SS Innovations International",
-      period: "",
-      cover: "",
-      gallery: [],
-      liveUrl: "",
-      repoUrl: "",
-      tech: ["Next.js", "React", "Tailwind CSS", "Three.js"],
-      problem: "The company needed a modern corporate website that shows its surgical robot, not just describes it.",
-      built: [
-        "Corporate website built with Next.js and Tailwind CSS.",
-        "3D product visuals of the SSi Mantra robot using Three.js.",
-      ],
-      impact: ["Visitors can explore the product in 3D directly in the browser."],
-      featured: false,
-      published: true,
-    },
-    {
       id: "prj-blackhole",
       slug: "black-hole-simulation",
       title: "Black Hole Simulation",
@@ -260,6 +176,56 @@ export const seedContent: SiteContent = {
         "Adaptive step sizing for high-performance rendering.",
       ],
       impact: ["Runs in real time in the browser with no install."],
+      featured: false,
+      published: true,
+    },
+    {
+      id: "prj-events",
+      slug: "ssi-events",
+      title: "SSI Events",
+      tagline: "Event registration & ticketing platform for surgical conferences.",
+      context: "SS Innovations International",
+      period: "",
+      cover: "",
+      gallery: [],
+      liveUrl: "",
+      repoUrl: "",
+      tech: ["Next.js", "TypeScript", "MongoDB", "Socket.IO", "AWS Lambda", "DynamoDB", "Google Maps API"],
+      problem:
+        "Surgical conferences need attendees to book limited slots, receive tickets and check in on the day, without double bookings or overselling, and organisers need live attendance and reports.",
+      built: [
+        "Event catalogue with slot-based booking and QR tickets.",
+        "Booking safety: retry IDs and MongoDB transactions on every booking request.",
+        "QR check-in with an in-browser scanner that validates the booked slot and pushes attendance live via Socket.IO.",
+        "Admin console with role-based access, activity logs, analytics and CSV / Excel / PDF report exports.",
+        "Live bus tracking on Google Maps and automated feedback emails, running on AWS Lambda and DynamoDB.",
+      ],
+      impact: [
+        "No double bookings or overselling: every booking request runs inside a MongoDB transaction with a retry ID.",
+        "Check-in is a single QR scan, and attendance appears live for organisers.",
+        "Organisers export reports themselves in CSV, Excel or PDF.",
+      ],
+      featured: true,
+      published: true,
+    },
+    {
+      id: "prj-corporate",
+      slug: "ss-innovations-website",
+      title: "SS Innovations corporate website",
+      tagline: "Corporate website with 3D product visuals of the SSi Mantra robot.",
+      context: "SS Innovations International",
+      period: "",
+      cover: "",
+      gallery: [],
+      liveUrl: "",
+      repoUrl: "",
+      tech: ["Next.js", "React", "Tailwind CSS", "Three.js"],
+      problem: "The company needed a modern corporate website that shows its surgical robot, not just describes it.",
+      built: [
+        "Corporate website built with Next.js and Tailwind CSS.",
+        "3D product visuals of the SSi Mantra robot using Three.js.",
+      ],
+      impact: ["Visitors can explore the product in 3D directly in the browser."],
       featured: false,
       published: true,
     },
@@ -305,73 +271,108 @@ export const seedContent: SiteContent = {
       published: false,
     },
   ],
+  hero: {
+    role: "Full Stack Developer",
+    company: "SS Innovations · SDE-1",
+    location: "India",
+    hire: "Ready to build the future.",
+    skills: [
+      { key: "languages", items: ["TypeScript", "JavaScript", "Python", "SQL"] },
+      { key: "frameworks", items: ["Next.js", "React", "Node.js", "Tailwind", "Three.js"] },
+      { key: "databases", items: ["MongoDB", "DynamoDB", "Redis"] },
+      { key: "cloud_services", items: ["AWS Lambda", "AWS S3", "AWS SES"] },
+      { key: "realtime", items: ["Socket.IO"] },
+      { key: "tools", items: ["Git", "GitLab CI/CD", "Figma"] },
+    ],
+    readme: `# Puneet Shukla
+
+Software Development Engineer (SDE-1)
+SS Innovations International · Gurugram, India
+
+## Now
+Building event, training and internal tools
+for a surgical-robotics company.
+
+## Stack
+Next.js · TypeScript · Node.js · MongoDB · AWS
+
+## Usage
+Run the build command to see the magic happen.`,
+    styles: `:root {
+  --primary: #007acc;
+  --bg: #02091a;
+}
+
+.career-path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.ships-to-production {
+  width: 100%;
+  height: 100%;
+}`,
+  },
   skills: [
-    { id: "sk-lang", name: "Languages", items: ["TypeScript", "JavaScript", "HTML", "CSS", "SQL", "Python"], published: true },
-    {
-      id: "sk-fe",
-      name: "Frontend",
-      items: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "Three.js", "Recharts", "Figma"],
-      published: true,
-    },
-    {
-      id: "sk-be",
-      name: "Backend",
-      items: ["Node.js", "REST APIs", "Socket.IO", "Authentication & role-based access"],
-      published: true,
-    },
-    {
-      id: "sk-cloud",
-      name: "Databases & Cloud",
-      items: ["MongoDB", "DynamoDB", "Redis", "AWS Lambda", "AWS S3", "AWS SES", "CloudFront", "EventBridge", "Docker", "Nginx"],
-      published: true,
-    },
-    {
-      id: "sk-tools",
-      name: "Tools",
-      items: ["Git", "GitLab CI/CD", "Google Maps API", "ZXing (QR scanning)", "xlsx", "pdf-lib"],
-      published: true,
-    },
-    {
-      id: "sk-old",
-      name: "More (from old portfolio, unconfirmed)",
-      items: ["PostgreSQL", "MySQL", "Electron", "AWS EC2", "PyTorch", "FastAPI"],
-      published: false,
-    },
+    { id: "sk-next", name: "Next.js", category: "FRONTEND", tag: "Core Framework", year: "2024", icon: "globe", companies: ["ssi"], description: "Server Actions, App Router, SSR.", published: true },
+    { id: "sk-react", name: "React Ecosystem", category: "FRONTEND", tag: "UI Library", year: "2023", icon: "layout", companies: ["ssi"], description: "Hooks, Context, Custom Patterns.", published: true },
+    { id: "sk-ts", name: "TypeScript", category: "FRONTEND", tag: "Language", year: "2023", icon: "code", companies: ["ssi"], description: "Strict typing, Interfaces, Generics.", published: true },
+    { id: "sk-framer", name: "Framer Motion", category: "FRONTEND", tag: "Animation", year: "2024", icon: "zap", companies: ["ssi"], description: "Gestures & layout animations.", published: true },
+    { id: "sk-tailwind", name: "Tailwind CSS", category: "FRONTEND", tag: "Design System", year: "2023", icon: "layers", companies: ["ssi"], description: "Config & responsive design.", published: true },
+    { id: "sk-node", name: "Node.js", category: "BACKEND", tag: "Runtime", year: "2022", icon: "server", companies: ["ssi"], description: "REST APIs, Socket.IO, auth & roles.", published: true },
+    { id: "sk-mongo", name: "MongoDB", category: "BACKEND", tag: "NoSQL", year: "2023", icon: "database", companies: ["ssi"], description: "Transactions, aggregation & indexing.", published: true },
+    { id: "sk-python", name: "Python", category: "BACKEND", tag: "Scripting", year: "2020", icon: "terminal", companies: ["medanta"], description: "Automation & Data Analysis.", published: true },
+    { id: "sk-socket", name: "Socket.IO", category: "BACKEND", tag: "Realtime", year: "2025", icon: "zap", companies: ["ssi"], description: "Live check-in & attendance.", published: true },
+    { id: "sk-three", name: "Three.js", category: "FRONTEND", tag: "3D", year: "2025", icon: "layers", companies: ["ssi"], description: "3D product visuals.", published: true },
+    { id: "sk-git", name: "Git & CI/CD", category: "TOOLS", tag: "DevOps", year: "2022", icon: "git", companies: ["medanta", "ssi"], description: "Version control & GitLab CI/CD.", published: true },
+    { id: "sk-aws", name: "AWS", category: "TOOLS", tag: "Cloud", year: "2024", icon: "cloud", companies: ["ssi"], description: "Lambda, S3, SES.", published: true },
+    // Hidden drafts from the old portfolio (not on the current resume): confirm before showing.
+    { id: "sk-postgres", name: "PostgreSQL", category: "BACKEND", tag: "Relational DB", year: "2021", icon: "hash", companies: ["medanta"], description: "Complex queries & normalization.", published: false },
+    { id: "sk-mysql", name: "MySQL", category: "BACKEND", tag: "Relational DB", year: "2021", icon: "database", companies: [], description: "Relational schemas & queries.", published: false },
+    { id: "sk-electron", name: "Electron", category: "TOOLS", tag: "Desktop", year: "2024", icon: "monitor", companies: ["ssi"], description: "Cross-platform desktop apps.", published: false },
+    { id: "sk-ec2", name: "AWS EC2", category: "TOOLS", tag: "Cloud", year: "2024", icon: "server", companies: ["ssi"], description: "Virtual servers.", published: false },
+  ],
+  skillCategories: [
+    { id: "ALL", label: "Ecosystem", wide: false },
+    { id: "FRONTEND", label: "Interface", wide: true },
+    { id: "BACKEND", label: "Core", wide: false },
+    { id: "TOOLS", label: "Infrastructure", wide: false },
   ],
   education: [
     {
       id: "edu-gla",
       school: "GLA University",
-      degree: "B.Tech, Computer Science and Engineering (AI & ML)",
+      degree: "B.Tech Computer Science (AI & ML)",
       start: "Sep 2021",
       end: "Aug 2025",
-      location: "Mathura, Uttar Pradesh",
+      location: "Mathura, India",
       grade: "CGPA 8.3 / 10",
       logo: "/images/logos/gla.jpeg",
-      highlights: ["Specialization in Artificial Intelligence & Machine Learning."],
+      summary: "Specialization in Artificial Intelligence & Machine Learning.",
+      highlights: ["Bachelor of Technology in Computer Science and Engineering (AI & ML).", "CGPA 8.3 / 10."],
+      tags: ["AI/ML", "Algorithms", "Data Structures"],
       published: true,
     },
     {
       id: "edu-gla-extra",
       school: "GLA University (extra details, unconfirmed)",
-      degree: "B.Tech, Computer Science and Engineering (AI & ML)",
+      degree: "B.Tech Computer Science (AI & ML)",
       start: "Sep 2021",
       end: "Aug 2025",
-      location: "Mathura, Uttar Pradesh",
+      location: "Mathura, India",
       grade: "CGPA 8.3 / 10",
       logo: "/images/logos/gla.jpeg",
-      highlights: [
-        "Minor in Cloud Computing.",
-        "Head of Technical Society.",
-        "Research on neural-network optimization.",
-      ],
+      summary: "Specialization in Artificial Intelligence & Machine Learning.",
+      highlights: ["Minor in Cloud Computing.", "Head of Technical Society.", "Research on neural-network optimization."],
+      tags: ["AI/ML", "Algorithms", "Research"],
       published: false,
     },
   ],
   events: {
-    heading: "Events",
-    intro:
-      "SMICTSI · ATCSA ICC · ISMICS 2026, One Unified Congress, 20–22 Nov 2026. I was at the SS Innovations booth with the SSI Mantra 3.",
+    heading: "Recent Events",
+    intro: "SMICTSI · ATCSA ICC · ISMICS 2026 — One Unified Congress, 20–22 Nov 2026, SS Innovations booth (SSI Mantra 3).",
     photos: [
       { id: "ph-arch", src: "/images/photos/congress-arch.webp", alt: "Red circular entrance arch with the SMICTSI · ATCSA ICC · ISMICS 2026 congress branding", caption: "One Unified Congress, 20–22 Nov 2026", published: true },
       { id: "ph-booth", src: "/images/photos/booth-standing.webp", alt: "Puneet in a dark suit in front of a multi-arm robotic surgical system at the SS Innovations booth", caption: "At the SS Innovations booth", published: true },
@@ -381,30 +382,100 @@ export const seedContent: SiteContent = {
     ],
   },
   beyond: {
-    heading: "Films",
+    kicker: "Beyond The Code",
+    heading: "Filmmaking &",
+    headingAccent: "Cinematography",
     intro:
-      "Outside work I shoot and edit short films: festivals, city mornings, street markets. Some of them are below.",
+      "While my professional focus lies in architecting software and engineering web platforms, my creative pursuit lives behind the lens. Filmmaking is my medium to capture raw emotion, ambient light, and compelling narratives. Here is a glimpse into my visual stories.",
     items: [
-      { id: "film-1", title: "The Divine Play", subtitle: "Braj Ki Holi", tags: ["CinemaScope", "Remastered"], image: "", published: true },
-      { id: "film-2", title: "Dwarka, Delhi", subtitle: "Delhi streets flower market", tags: ["Street photography", "24mm lens"], image: "", published: true },
-      { id: "film-3", title: "Marine Drive", subtitle: "Life at 7 AM, Bombay", tags: ["16mm film"], image: "", published: true },
-      { id: "film-4", title: "Ethereal Canvas", subtitle: "Nature's palette", tags: ["Vibrance", "Horizon"], image: "", published: true },
-      { id: "film-5", title: "The Uphill Battle", subtitle: "Dreams vs. everyone", tags: ["Inner light", "Resilience"], image: "", published: true },
+      {
+        id: "film-braj",
+        kicker: "The Divine Play",
+        title: "Braj Ki",
+        titleAccent: "Holi",
+        quote:
+          "In the sacred lanes of Vrindavan, colors aren't just thrown—they are lived. Witness the eternal dance where the divine love of Radha and Krishna dissolves the boundaries between the human and the celestial.",
+        tags: ["CinemaScope", "Remastered"],
+        video: "/videos/heroone.webm",
+        poster: "/videos/heroone.webp",
+        rotate: false,
+        videoRight: false,
+        theme: "gold",
+        published: true,
+      },
+      {
+        id: "film-delhi",
+        kicker: "Dwarka, Delhi",
+        title: "Delhi Streets",
+        titleAccent: "Flower Market",
+        quote:
+          "Before the city wakes, the streets erupt in a chaotic symphony of fragrance and color. Marigolds, roses, and jasmine flood the alleyways, painting the dawn with the vibrant soul of the capital.",
+        tags: ["Street Photography", "24mm Lens"],
+        video: "/videos/herotwo.webm",
+        poster: "/videos/herotwo.webp",
+        rotate: false,
+        videoRight: true,
+        theme: "orange",
+        published: true,
+      },
+      {
+        id: "film-bombay",
+        kicker: "Marine Drive",
+        title: "The Life in",
+        titleAccent: "7 AM Bombay",
+        quote:
+          "The sea breeze carries the stories of a million dreams. As the first light hits the Queen's Necklace, the city shakes off its slumber, ready to conquer another day in the city that never sleeps.",
+        tags: ["First Light", "16mm Film"],
+        video: "/videos/herofour.webm",
+        poster: "/videos/herofour.webp",
+        rotate: false,
+        videoRight: true,
+        theme: "blue",
+        published: true,
+      },
+      {
+        id: "film-nature",
+        kicker: "Ethereal Canvas",
+        title: "Nature's",
+        titleAccent: "Palette",
+        quote:
+          "The sky doesn't ask for attention, yet it commands it. In the gradient of the horizon, we find the colors of our own emotions—ever-changing, infinite, and beautifully untamed.",
+        tags: ["Vibrance", "Horizon"],
+        video: "/videos/herofive.webm",
+        poster: "/videos/herofive.webp",
+        rotate: true,
+        videoRight: false,
+        theme: "sunset",
+        published: true,
+      },
+      {
+        id: "film-dreams",
+        kicker: "The Uphill Battle",
+        title: "Dreams",
+        titleAccent: "Vs. Everyone",
+        quote:
+          "They told him to be realistic. They told him to follow the path. But the vision was too clear to ignore. Standing alone against the tide, it's not just about proving them wrong—it's about proving yourself right.",
+        tags: ["Inner Light", "Resilience"],
+        video: "/videos/herosix.webm",
+        poster: "/videos/herosix.webp",
+        rotate: true,
+        videoRight: true,
+        theme: "purple",
+        published: true,
+      },
     ],
   },
   social: [
     { id: "s-li", label: "LinkedIn", url: "https://www.linkedin.com/in/puneet-shukla-72b915225", icon: "linkedin", published: true },
-    { id: "s-gh", label: "GitHub", url: "https://github.com/puneet2343", icon: "github", published: true },
+    { id: "s-gh", label: "GitHub", url: "https://github.com/puneet2343", icon: "github", published: false },
     { id: "s-em", label: "Email", url: "mailto:puneetshukla042@gmail.com", icon: "email", published: true },
   ],
   sections: [
-    { id: "about", label: "About", visible: true },
-    { id: "experience", label: "Work", visible: true },
+    { id: "experience", label: "Journey", visible: true },
+    { id: "skills", label: "Ecosystem", visible: true },
     { id: "projects", label: "Projects", visible: true },
-    { id: "skills", label: "Skills", visible: true },
-    { id: "education", label: "Education", visible: true },
-    { id: "events", label: "Events", visible: true },
     { id: "beyond", label: "Films", visible: true },
+    { id: "events", label: "Events", visible: true },
     { id: "contact", label: "Contact", visible: true },
   ],
   seo: {
@@ -414,11 +485,12 @@ export const seedContent: SiteContent = {
     keywords: ["Puneet Shukla", "Full-stack developer", "Software engineer", "Next.js", "TypeScript", "React", "Node.js", "Gurugram"],
     siteUrl: "",
   },
-  theme: { accent: "#b2532e", accent2: "#4f6f52", defaultMode: "light" },
+  theme: { accent: "#007acc", accent2: "#10b981", defaultMode: "system" },
   contact: {
-    heading: "Contact",
+    heading: "Get in Touch",
     blurb: "The quickest way to reach me is email. You can also leave a message here and I'll reply.",
     formEnabled: true,
   },
+  version: 2,
   updatedAt: "2026-11-27T00:00:00.000Z",
 };

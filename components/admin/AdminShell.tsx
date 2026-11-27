@@ -78,7 +78,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         <span className="b2" />
         <span className="b3" />
       </div>
-      <div className="mx-auto flex min-h-dvh max-w-7xl gap-6 px-3 py-3 sm:px-5 lg:py-5">
+      <div className="admin mx-auto flex min-h-dvh max-w-7xl gap-6 px-3 py-3 sm:px-5 lg:py-5">
         {/* Desktop sidebar */}
         <aside className="glass sticky top-5 hidden h-[calc(100dvh-2.5rem)] w-64 shrink-0 flex-col overflow-y-auto rounded-[1.6rem] p-4 lg:flex">
           <div className="mb-6 flex items-center justify-between px-3">
@@ -126,7 +126,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
       {open ? (
         <div className="fixed inset-0 z-[80] lg:hidden" role="dialog" aria-modal="true" aria-label="Admin menu">
           <button className="absolute inset-0 bg-black/30" aria-label="Close menu" onClick={() => setOpen(false)} />
-          <div className="glass glass-strong absolute inset-y-2 right-2 flex w-[min(20rem,88vw)] flex-col overflow-y-auto rounded-[1.6rem] p-4">
+          <div className="admin glass glass-strong absolute inset-y-2 right-2 flex w-[min(20rem,88vw)] flex-col overflow-y-auto rounded-[1.6rem] p-4">
             <div className="mb-4 flex items-center justify-between px-3">
               <span className="font-serif text-lg font-medium">Site admin</span>
               <button onClick={() => setOpen(false)} aria-label="Close menu" className="inline-flex h-11 w-11 items-center justify-center rounded-full">

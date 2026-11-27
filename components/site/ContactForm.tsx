@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 type Status = { kind: "idle" | "sending" | "ok" | "error"; text?: string };
 
 const field =
-  "mt-1.5 block w-full rounded-xl border border-line bg-[var(--glass-strong)] px-4 py-3 text-base text-fg placeholder:text-subtle outline-none transition focus:border-accent focus:ring-2 focus:ring-[color-mix(in_oklab,var(--accent)_25%,transparent)]";
+  "mt-1.5 block w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-base text-foreground placeholder:text-foreground/40 outline-none transition focus:border-[#007acc] focus:ring-2 focus:ring-[#007acc]/25";
 
 export function ContactForm() {
   const started = useRef<number>(0);
@@ -38,24 +38,24 @@ export function ContactForm() {
       onFocus={() => {
         if (!started.current) started.current = Date.now();
       }}
-      className="glass rounded-[1.6rem] p-5 sm:p-7"
+      className="relative rounded-3xl border border-white/10 bg-background/60 p-5 sm:p-7 backdrop-blur-md shadow-2xl shadow-black/50"
       noValidate={false}
     >
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="block text-sm font-medium">
+        <label className="block text-xs font-medium uppercase tracking-widest text-foreground/60">
           Name
           <input name="name" required minLength={2} maxLength={120} autoComplete="name" className={field} />
         </label>
-        <label className="block text-sm font-medium">
+        <label className="block text-xs font-medium uppercase tracking-widest text-foreground/60">
           Email
           <input name="email" type="email" required maxLength={200} autoComplete="email" className={field} />
         </label>
       </div>
-      <label className="mt-4 block text-sm font-medium">
-        Subject <span className="font-normal text-subtle">(optional)</span>
+      <label className="mt-4 block text-xs font-medium uppercase tracking-widest text-foreground/60">
+        Subject <span className="font-normal normal-case tracking-normal text-foreground/40">(optional)</span>
         <input name="subject" maxLength={200} className={field} />
       </label>
-      <label className="mt-4 block text-sm font-medium">
+      <label className="mt-4 block text-xs font-medium uppercase tracking-widest text-foreground/60">
         Message
         <textarea name="message" required minLength={10} maxLength={5000} rows={5} className={`${field} resize-y`} />
       </label>
@@ -72,14 +72,14 @@ export function ContactForm() {
         <p
           role="status"
           aria-live="polite"
-          className={`text-sm ${status.kind === "error" ? "text-[#b42318] dark:text-[#ff9b8f]" : "text-muted"}`}
+          className={`text-sm ${status.kind === "error" ? "text-red-400" : "text-emerald-500"}`}
         >
           {status.text}
         </p>
         <button
           type="submit"
           disabled={status.kind === "sending"}
-          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-accent-ink transition hover:brightness-110 disabled:opacity-60"
+          className="inline-flex h-12 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground px-6 text-sm font-semibold text-background transition hover:scale-[1.02] active:scale-95 disabled:opacity-60"
         >
           {status.kind === "sending" ? (
             <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />

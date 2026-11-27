@@ -73,6 +73,17 @@ async function hiddenPhotos(existing: Photo[]): Promise<Photo[]> {
   return out;
 }
 
+/** Older content (version < 2) gets the new seed; extra event photos and an uploaded resume are kept. */
+function migrate(stored: Content): Content {
+  if (stored?.version === seedContent.version) return stored;
+  const seed = structuredClone(seedContent);
+  const extra = (stored?.events?.photos ?? []).filter((p) => p?.id && !seed.events.photos.some((x) => x.id === p.id));
+  if (stored?.profile?.resumeUrl) seed.profile.resumeUrl = stored.profile.resumeUrl;
+  seed.events.photos.push(...extra);
+  console.log(`migrated content to version ${seed.version} (kept ${extra.length} extra photos)`);
+  return seed;
+}
+
 async function main() {
   if (process.env.MONGODB_URI) {
     const { MongoClient } = await import("mongodb");
@@ -80,12 +91,12 @@ async function main() {
     try {
       const col = client.db(process.env.MONGODB_DB || "portfolio").collection<{ _id: string; data: Content }>("content");
       const doc = await col.findOne({ _id: "site" });
-      const base: Content = doc && !force ? doc.data : structuredClone(seedContent);
+      const base: Content = doc && !force ? migrate(doc.data) : structuredClone(seedContent);
       const extra = await hiddenPhotos(base.events?.photos ?? []);
       base.events = { ...(base.events ?? seedContent.events), photos: [...(base.events?.photos ?? []), ...extra] };
       base.updatedAt = new Date().toISOString();
       await col.updateOne({ _id: "site" }, { $set: { data: base } }, { upsert: true });
-      console.log(doc && !force ? "MongoDB: kept existing content" : "MongoDB: seeded content", `(+${extra.length} hidden photos)`);
+      console.log(doc && !force ? "MongoDB: kept existing content (migrated if old)" : "MongoDB: seeded content", `(+${extra.length} hidden photos)`);
     } finally {
       await client.close();
     }
@@ -94,7 +105,7 @@ async function main() {
   const file = path.join("data", "content.json");
   let base: Content;
   try {
-    base = force ? structuredClone(seedContent) : (JSON.parse(await fs.readFile(file, "utf8")) as Content);
+    base = force ? structuredClone(seedContent) : migrate(JSON.parse(await fs.readFile(file, "utf8")) as Content);
   } catch {
     base = structuredClone(seedContent);
   }

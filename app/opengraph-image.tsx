@@ -21,24 +21,24 @@ export default async function OpengraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          background: "linear-gradient(135deg, #f7f3ed 0%, #f3e2d3 55%, #dfe8d9 100%)",
-          color: "#1d1915",
+          background: "radial-gradient(circle at 20% 0%, rgba(0,122,204,0.35), transparent 55%), #02091a",
+          color: "#ededed",
           padding: 56,
           gap: 48,
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", flex: 1 }}>
-          <div style={{ display: "flex", fontSize: 26, color: c.theme.accent, letterSpacing: 2, textTransform: "uppercase" }}>
-            {c.profile.badge}
+          <div style={{ display: "flex", fontSize: 26, color: "#4ec9b0", letterSpacing: 2, textTransform: "uppercase" }}>
+            {"const puneet: Developer"}
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 88, fontWeight: 700, lineHeight: 1, letterSpacing: -2 }}>{c.profile.name}</div>
-            <div style={{ fontSize: 36, marginTop: 20, color: "#574e45", lineHeight: 1.25 }}>{c.profile.role}</div>
-            <div style={{ fontSize: 28, marginTop: 10, color: "#574e45" }}>
+            <div style={{ fontSize: 36, marginTop: 20, color: "rgba(237,237,237,0.7)", lineHeight: 1.25 }}>{c.profile.role}</div>
+            <div style={{ fontSize: 28, marginTop: 10, color: "rgba(237,237,237,0.7)" }}>
               {`${c.profile.company} · ${c.profile.location}`}
             </div>
           </div>
-          <div style={{ display: "flex", fontSize: 24, color: "#6f655b" }}>Projects · Work · Contact</div>
+          <div style={{ display: "flex", fontSize: 24, color: "rgba(237,237,237,0.5)" }}>Journey · Projects · Films · Contact</div>
         </div>
         {photo ? (
           <div
@@ -48,7 +48,7 @@ export default async function OpengraphImage() {
               height: 518,
               borderRadius: 36,
               overflow: "hidden",
-              border: "8px solid rgba(255,255,255,0.7)",
+              border: "1px solid rgba(255,255,255,0.15)",
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}

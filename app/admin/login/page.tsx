@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export default async function LoginPage() {
   if (await isAdmin()) redirect("/admin");
   return (
-    <main className="flex min-h-dvh items-center justify-center px-4 py-10">
+    <main className="admin flex min-h-dvh items-center justify-center px-4 py-10">
       <div className="backdrop" aria-hidden>
         <span className="b1" />
         <span className="b2" />

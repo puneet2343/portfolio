@@ -15,7 +15,7 @@ export const getPublicContent = cache(async (): Promise<SiteContent> => {
     ...c,
     experience: c.experience.filter((x) => x.published),
     projects: c.projects.filter((x) => x.published),
-    skills: c.skills.filter((x) => x.published && x.items.length > 0),
+    skills: c.skills.filter((x) => x.published),
     education: c.education.filter((x) => x.published),
     events: { ...c.events, photos: c.events.photos.filter((x) => x.published && x.src) },
     beyond: { ...c.beyond, items: c.beyond.items.filter((x) => x.published) },

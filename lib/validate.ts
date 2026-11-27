@@ -19,8 +19,8 @@ const shapes: Record<ContentKey, Shape> = {
   about: { heading: "s", paragraphs: TA, facts: [{ label: "s", value: "s" }] },
   experience: [
     {
-      id: "s", company: "s", role: "s", start: "s", end: "s", location: "s", logo: "u", summary: "t",
-      items: [{ title: "s", tech: SA, points: TA }], tech: SA, published: "b",
+      id: "s", company: "s", role: "s", type: "s", start: "s", end: "s", location: "s", logo: "u", summary: "t",
+      points: TA, tech: SA, published: "b",
     },
   ],
   projects: [
@@ -29,15 +29,27 @@ const shapes: Record<ContentKey, Shape> = {
       liveUrl: "u", repoUrl: "u", tech: SA, problem: "t", built: TA, impact: TA, featured: "b", published: "b",
     },
   ],
-  skills: [{ id: "s", name: "s", items: SA, published: "b" }],
+  hero: { role: "s", company: "s", location: "s", hire: "s", skills: [{ key: "s", items: SA }], readme: "t", styles: "t" },
+  skillCategories: [{ id: "s", label: "s", wide: "b" }],
+  skills: [
+    { id: "s", name: "s", category: "s", tag: "s", year: "s", icon: "s", companies: SA, description: "t", published: "b" },
+  ],
   education: [
     {
       id: "s", school: "s", degree: "s", start: "s", end: "s", location: "s", grade: "s", logo: "u",
-      highlights: TA, published: "b",
+      summary: "t", highlights: TA, tags: SA, published: "b",
     },
   ],
   events: { heading: "s", intro: "t", photos: [{ id: "s", src: "u", alt: "s", caption: "s", published: "b" }] },
-  beyond: { heading: "s", intro: "t", items: [{ id: "s", title: "s", subtitle: "s", tags: SA, image: "u", published: "b" }] },
+  beyond: {
+    kicker: "s", heading: "s", headingAccent: "s", intro: "t",
+    items: [
+      {
+        id: "s", kicker: "s", title: "s", titleAccent: "s", quote: "t", tags: SA, video: "u", poster: "u",
+        rotate: "b", videoRight: "b", theme: "s", published: "b",
+      },
+    ],
+  },
   social: [{ id: "s", label: "s", url: "u", icon: "s", published: "b" }],
   sections: [{ id: "s", label: "s", visible: "b" }],
   seo: { title: "s", description: "t", keywords: SA, siteUrl: "u" },
@@ -106,7 +118,23 @@ export function sanitizeContentPart<K extends ContentKey>(key: K, value: unknown
     for (const p of (v as unknown as SiteContent["events"]).photos) if (!p.id) p.id = rid();
   }
   if (key === "beyond") {
-    for (const p of (v as unknown as SiteContent["beyond"]).items) if (!p.id) p.id = rid();
+    const themes = ["gold", "orange", "blue", "sunset", "purple"];
+    for (const p of (v as unknown as SiteContent["beyond"]).items) {
+      if (!p.id) p.id = rid();
+      if (!themes.includes(p.theme)) p.theme = "gold";
+    }
+  }
+  if (key === "skills") {
+    const icons = ["globe", "layout", "code", "zap", "layers", "server", "database", "terminal", "git", "cloud", "monitor", "hash"];
+    for (const sk of v as unknown as SiteContent["skills"]) {
+      sk.category = (sk.category || "TOOLS").toUpperCase().replace(/[^A-Z0-9_-]/g, "") || "TOOLS";
+      if (!icons.includes(sk.icon)) sk.icon = "code";
+    }
+  }
+  if (key === "skillCategories") {
+    const list = v as unknown as SiteContent["skillCategories"];
+    for (const c of list) c.id = (c.id || c.label).toUpperCase().replace(/[^A-Z0-9_-]/g, "") || "OTHER";
+    if (!list.some((c) => c.id === "ALL")) list.unshift({ id: "ALL", label: "Ecosystem", wide: false });
   }
   if (key === "social") {
     for (const s of v as unknown as SiteContent["social"]) if (!ICONS.has(s.icon)) s.icon = "website";
@@ -118,9 +146,9 @@ export function sanitizeContentPart<K extends ContentKey>(key: K, value: unknown
   if (key === "theme") {
     const t = v as unknown as SiteContent["theme"];
     const hex = /^#[0-9a-f]{6}$/i;
-    if (!hex.test(t.accent)) t.accent = "#b2532e";
-    if (!hex.test(t.accent2)) t.accent2 = "#4f6f52";
-    if (t.defaultMode !== "dark") t.defaultMode = "light";
+    if (!hex.test(t.accent)) t.accent = "#007acc";
+    if (!hex.test(t.accent2)) t.accent2 = "#10b981";
+    if (t.defaultMode !== "dark" && t.defaultMode !== "light") t.defaultMode = "system";
   }
   return v;
 }

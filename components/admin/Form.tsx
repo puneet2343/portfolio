@@ -12,7 +12,7 @@ export type Field =
   | { k: string; label: string; type: "tags"; help?: string; half?: boolean }
   | { k: string; label: string; type: "toggle"; help?: string }
   | { k: string; label: string; type: "color"; help?: string; half?: boolean }
-  | { k: string; label: string; type: "image" | "pdf"; help?: string }
+  | { k: string; label: string; type: "image" | "pdf" | "video"; help?: string }
   | { k: string; label: string; type: "select"; options: { value: string; label: string }[]; half?: boolean }
   | { k: string; label: string; type: "list"; item: Field[]; newItem: () => any; titleOf: (x: any) => string; addLabel: string; help?: string };
 
@@ -48,6 +48,7 @@ export function ObjectForm({ fields, value, onChange }: { fields: Field[]; value
             break;
           case "image":
           case "pdf":
+          case "video":
             el = <MediaInput label={f.label} help={f.help} accept={f.type} value={v ?? ""} onChange={(x) => set(f.k, x)} />;
             break;
           case "select":

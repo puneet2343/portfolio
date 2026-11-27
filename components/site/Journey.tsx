@@ -1,0 +1,271 @@
+"use client";
+
+import React, { useRef, useState } from "react";
+import { motion, useMotionTemplate, useMotionValue } from "motion/react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
+}
+
+export interface TimelineData {
+  id: string;
+  role: string;
+  company: string;
+  period: string;
+  location: string;
+  logo: string;
+  type: string;
+  description: string;
+  points: string[];
+  tech: string[];
+}
+
+function useMousePosition() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+  return { mouseX, mouseY, handleMouseMove };
+}
+
+// Deterministic "random" so server and client render the same particles
+const rnd = (i: number, k: number) => {
+  const x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+};
+
+const MeteorParticles = () => {
+  const particles = Array.from({ length: 8 });
+  return (
+    <div className="absolute -bottom-4 -left-4 w-8 h-8 pointer-events-none">
+      {particles.map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: [0, 1, 0],
+            scale: [0, 1.5, 0],
+            x: [0, (rnd(i, 1) - 0.5) * 40],
+            y: [0, (rnd(i, 2) - 0.5) * 40],
+            rotate: rnd(i, 3) * 360,
+          }}
+          transition={{ duration: 1 + rnd(i, 4), repeat: Infinity, ease: "easeOut", delay: rnd(i, 5) * 0.5 }}
+          className="absolute left-1/2 top-1/2 w-[2px] h-[2px] bg-white rounded-full shadow-[0_0_8px_2px_rgba(255,255,255,0.8)]"
+        />
+      ))}
+    </div>
+  );
+};
+
+export default function Journey({ items, title = "The", accent = "Journey.", subtitle }: { items: TimelineData[]; title?: string; accent?: string; subtitle: string }) {
+  const container = useRef<HTMLElement>(null);
+  const leftCol = useRef<HTMLDivElement>(null);
+  const meteorRef = useRef<HTMLDivElement>(null);
+  const [activeCompany, setActiveCompany] = useState(items[0]?.company ?? "");
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px)", () => {
+        ScrollTrigger.create({
+          trigger: container.current,
+          start: "top top",
+          end: "bottom bottom",
+          pin: leftCol.current,
+          pinSpacing: false,
+        });
+
+        gsap.to(meteorRef.current, {
+          height: "100%",
+          ease: "none",
+          scrollTrigger: { trigger: container.current, start: "top top", end: "bottom bottom", scrub: 0.5 },
+        });
+
+        const cards = gsap.utils.toArray<HTMLElement>(".timeline-card");
+        cards.forEach((card, i) => {
+          gsap.fromTo(
+            card,
+            { opacity: 0, y: 100, scale: 0.9 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: card, start: "top 85%", end: "top 50%", toggleActions: "play none none reverse" },
+            },
+          );
+          const connector = card.querySelector(".connector-line");
+          if (connector) {
+            gsap.fromTo(
+              connector,
+              { width: "0%", opacity: 0 },
+              { width: "100%", opacity: 1, duration: 0.4, ease: "power2.out", scrollTrigger: { trigger: card, start: "top 70%" } },
+            );
+          }
+          ScrollTrigger.create({
+            trigger: card,
+            start: "top center",
+            end: "bottom center",
+            onEnter: () => setActiveCompany(items[i].company),
+            onEnterBack: () => setActiveCompany(items[i].company),
+          });
+        });
+      });
+
+      mm.add("(max-width: 767px)", () => {
+        const cards = gsap.utils.toArray<HTMLElement>(".timeline-card");
+        cards.forEach((card) => {
+          gsap.fromTo(
+            card,
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" } },
+          );
+        });
+      });
+
+      return () => mm.revert();
+    },
+    { scope: container, dependencies: [items.length] },
+  );
+
+  return (
+    <section id="journey" ref={container} aria-labelledby="journey-title" className="relative w-full bg-background text-foreground font-sans z-10 min-h-screen pb-16 md:pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 grid grid-cols-1 md:grid-cols-12 md:gap-8">
+        {/* LEFT COLUMN: normal flow on mobile, pinned on desktop */}
+        <div ref={leftCol} className="md:col-span-5 flex flex-col justify-center pt-24 pb-8 md:py-0 md:h-screen">
+          <div className="pl-3 md:pl-4 border-l-2 border-white/10 relative overflow-hidden">
+            <h2 id="journey-title" className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter text-foreground mb-4 md:mb-6">
+              {title} <span className="text-foreground/50">{accent}</span>
+            </h2>
+            <p className="text-foreground/70 md:text-foreground/80 text-base md:text-xl font-light tracking-wide max-w-sm mb-0 md:mb-8">{subtitle}</p>
+            <div className="hidden md:block">
+              <p className="text-xs font-mono text-emerald-500 mb-2 uppercase tracking-widest">Currently Viewing</p>
+              <div key={activeCompany}>
+                <h3 className="text-3xl font-bold text-foreground/90">{activeCompany}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: scrollable timeline */}
+        <div className="md:col-span-7 relative pt-8 pb-8 md:pt-[50vh] md:pb-[20vh]">
+          <div className="hidden md:block absolute left-0 top-0 bottom-0 w-px">
+            <div className="absolute inset-0 w-[1px] bg-gradient-to-b from-transparent via-foreground/20 to-foreground/20 h-full opacity-50" />
+            <div ref={meteorRef} className="absolute top-0 left-0 w-[1px] bg-gradient-to-b from-transparent via-white/50 to-white z-20 h-0 overflow-visible">
+              <div className="absolute bottom-0 -left-[3px] w-2 h-2">
+                <div className="absolute inset-0 bg-white rounded-full blur-[2px] shadow-[0_0_10px_4px_rgba(255,255,255,0.6)]" />
+                <div className="absolute -inset-2 bg-white/30 rounded-full blur-xl" />
+                <div className="absolute -inset-2 bg-white/30 rounded-full blur-xl" />
+                <MeteorParticles />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-12 md:gap-32">
+            {items.map((item, index) => (
+              <TimelineItem key={item.id} data={item} index={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const TimelineItem = ({ data, index }: { data: TimelineData; index: number }) => (
+  <div className="timeline-card relative min-h-fit flex items-center justify-center md:pl-16 perspective-1000">
+    <div className="hidden md:block absolute top-1/2 left-0 w-16 h-px z-0 pointer-events-none -translate-y-1/2">
+      <div className="connector-line h-full bg-gradient-to-r from-foreground/20 via-white/50 to-foreground/20 w-0 opacity-0" />
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_2px_rgba(255,255,255,0.5)]" />
+    </div>
+    <div className="w-full origin-bottom">
+      <SpotlightCard data={data} index={index} />
+    </div>
+  </div>
+);
+
+const SpotlightCard = ({ data, index }: { data: TimelineData; index: number }) => {
+  const { mouseX, mouseY, handleMouseMove } = useMousePosition();
+  const spot1 = useMotionTemplate`radial-gradient(650px circle at ${mouseX}px ${mouseY}px, rgba(255, 255, 255, 0.1), transparent 80%)`;
+  const spot2 = useMotionTemplate`radial-gradient(650px circle at ${mouseX}px ${mouseY}px, rgba(255, 255, 255, 0.15), transparent 80%)`;
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden bg-background/60 border border-white/10 backdrop-blur-md group/card transition-all duration-500 hover:border-white/20 shadow-2xl shadow-black/50"
+    >
+      <motion.div className="hidden md:block pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover/card:opacity-100 z-10" style={{ background: spot1 }} />
+      <motion.div className="hidden md:block pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover/card:opacity-100 z-20" style={{ background: spot2 }} />
+
+      <div className="relative z-30 p-5 sm:p-6 md:p-8 flex flex-col sm:flex-row gap-5 md:gap-8">
+        <div className="flex flex-row sm:flex-col gap-4 shrink-0 justify-start items-center sm:items-start">
+          <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-xl overflow-hidden bg-white/5 border border-white/10 shadow-inner group-hover/card:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-500">
+            {data.logo ? (
+              <Image src={data.logo} alt={data.company} fill sizes="64px" className="object-cover opacity-90 group-hover/card:opacity-100 transition-all duration-500 sm:group-hover/card:scale-110" />
+            ) : (
+              <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-foreground/60">{data.company.slice(0, 2).toUpperCase()}</span>
+            )}
+          </div>
+          <div className="flex flex-col pt-0 sm:pt-1">
+            <span className="text-[10px] md:text-[9px] font-mono uppercase tracking-widest text-foreground/50 group-hover/card:text-foreground transition-colors">{data.period}</span>
+            <span className="text-[10px] md:text-[9px] font-mono text-foreground/50 mt-0.5">{data.location}</span>
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="mb-3 md:mb-4">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground mb-1 group-hover/card:text-foreground/90 transition-colors tracking-tight">{data.role}</h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-foreground/80 font-medium text-xs md:text-sm">{data.company}</span>
+              <span className="w-1 h-1 rounded-full bg-foreground/50" />
+              <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] md:text-[9px] font-medium text-foreground/60 uppercase tracking-wide">{data.type}</span>
+            </div>
+          </div>
+
+          <p className="text-foreground/80 md:text-foreground/90 text-sm leading-relaxed font-light mb-4 md:mb-5 border-l border-white/10 md:border-white/20 pl-3 md:pl-4 group-hover/card:border-white/40 transition-colors">
+            {data.description}
+          </p>
+
+          {data.points.length > 0 && (
+            <ul className="space-y-2 mb-5 md:mb-6">
+              {data.points.map((point, i) => (
+                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-foreground/70 group-hover/card:text-foreground/90 transition-colors">
+                  <span className="mt-1.5 w-1 h-1 rounded-full bg-foreground/50 group-hover/card:bg-foreground transition-colors shadow-[0_0_5px_rgba(255,255,255,0)] group-hover/card:shadow-[0_0_5px_rgba(255,255,255,0.5)] shrink-0" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="flex flex-wrap gap-1.5">
+            {data.tech.map((t, i) => (
+              <span
+                key={i}
+                className="px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.08] text-[9px] md:text-[10px] font-medium text-foreground/70 md:hover:text-foreground md:hover:bg-white/10 md:hover:border-white/20 transition-all duration-300 cursor-default tracking-wide"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="hidden xl:block absolute top-6 right-6">
+          <div className="flex flex-col items-end gap-0.5 opacity-20 group-hover/card:opacity-50 transition-opacity">
+            <div className="w-8 h-[1px] bg-foreground" />
+            <div className="w-[1px] h-2 bg-foreground" />
+            <span className="text-[8px] font-mono tracking-widest mt-0.5 text-foreground">SYS.0{index + 1}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

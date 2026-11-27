@@ -17,7 +17,7 @@ export function CopyEmail({ email }: { email: string }) {
           window.location.href = `mailto:${email}`;
         }
       }}
-      className="inline-flex h-10 items-center gap-2 rounded-full border border-line px-4 text-sm text-muted transition hover:text-fg"
+      className="inline-flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-foreground/70 transition hover:bg-white/10 hover:text-foreground"
     >
       {done ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
       <span aria-live="polite">{done ? "Copied" : "Copy email"}</span>

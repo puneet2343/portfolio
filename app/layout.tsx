@@ -38,8 +38,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f3ed" },
-    { media: "(prefers-color-scheme: dark)", color: "#171411" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f8fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#02091a" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -47,15 +47,16 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const c = await getContent();
-  const mode = c.theme.defaultMode === "dark" ? "dark" : "light";
+  const mode = c.theme.defaultMode;
   const style = { "--brand": c.theme.accent, "--brand-2": c.theme.accent2 } as CSSProperties;
   // Runs before first paint: apply the visitor's saved theme (or the site default) without a flash.
-  const themeScript = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="dark"||t==="light"?t:"${mode}")}catch(e){}})()`;
+  const themeScript = `(function(){var d=document.documentElement,m="${mode}";try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")m=t}catch(e){}if(m!=="dark"&&m!=="light")m=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";d.setAttribute("data-theme",m)})()`;
 
   return (
     <html
       lang="en"
-      data-theme={mode}
+      data-theme={mode === "light" ? "light" : "dark"}
+      data-theme-default={mode}
       style={style}
       className={`${display.variable} ${body.variable}`}
       suppressHydrationWarning

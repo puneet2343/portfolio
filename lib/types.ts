@@ -44,22 +44,19 @@ export interface About {
   facts: { label: string; value: string }[];
 }
 
-export interface SubProject {
-  title: string;
-  tech: string[];
-  points: string[];
-}
-
+/** One card in "The Journey" timeline (jobs and internships). */
 export interface Experience {
   id: string;
   company: string;
   role: string;
+  /** Badge on the card, e.g. Full-time, Internship */
+  type: string;
   start: string;
   end: string;
   location: string;
   logo: string;
   summary: string;
-  items: SubProject[];
+  points: string[];
   tech: string[];
   published: boolean;
 }
@@ -83,10 +80,27 @@ export interface Project {
   published: boolean;
 }
 
-export interface SkillGroup {
+/** Filter tab in "Engineering Ecosystem". id "ALL" shows every card. */
+export interface SkillCategoryDef {
+  id: string;
+  label: string;
+  /** Cards of this category take two columns in the "ALL" view */
+  wide: boolean;
+}
+export type SkillIcon = "globe" | "layout" | "code" | "zap" | "layers" | "server" | "database" | "terminal" | "git" | "cloud" | "monitor" | "hash";
+
+/** One card in the "Engineering Ecosystem" grid. */
+export interface SkillCard {
   id: string;
   name: string;
-  items: string[];
+  /** id of a SkillCategoryDef, e.g. FRONTEND */
+  category: string;
+  tag: string;
+  year: string;
+  icon: SkillIcon;
+  /** Company keys shown as small logos: "ssi" | "medanta" */
+  companies: string[];
+  description: string;
   published: boolean;
 }
 
@@ -99,16 +113,32 @@ export interface Education {
   location: string;
   grade: string;
   logo: string;
+  summary: string;
   highlights: string[];
+  tags: string[];
   published: boolean;
 }
 
+export type FilmTheme = "gold" | "orange" | "blue" | "sunset" | "purple";
+
+/** One full-screen film block in "Beyond the Code". */
 export interface BeyondItem {
   id: string;
+  /** Small label above the title, e.g. "The Divine Play" */
+  kicker: string;
+  /** First title line */
   title: string;
-  subtitle: string;
+  /** Second title line, shown with the gradient */
+  titleAccent: string;
+  quote: string;
   tags: string[];
-  image: string;
+  video: string;
+  poster: string;
+  /** Portrait clips recorded sideways need rotating */
+  rotate: boolean;
+  /** Video on the right on desktop (text on the left) */
+  videoRight: boolean;
+  theme: FilmTheme;
   published: boolean;
 }
 
@@ -127,9 +157,25 @@ export interface Events {
 }
 
 export interface Beyond {
+  kicker: string;
   heading: string;
+  headingAccent: string;
   intro: string;
   items: BeyondItem[];
+}
+
+/** The VS Code hero: files shown in the editor. */
+export interface HeroCode {
+  /** Lines in developer.ts */
+  role: string;
+  company: string;
+  location: string;
+  /** Text returned by hire() */
+  hire: string;
+  /** key/value lines inside skills: { ... } in developer.ts */
+  skills: { key: string; items: string[] }[];
+  readme: string;
+  styles: string;
 }
 
 export type SocialIcon = "github" | "linkedin" | "email" | "website" | "x" | "youtube" | "instagram";
@@ -152,7 +198,7 @@ export interface Seo {
 export interface Theme {
   accent: string;
   accent2: string;
-  defaultMode: "dark" | "light";
+  defaultMode: "dark" | "light" | "system";
 }
 
 export interface ContactSettings {
@@ -166,7 +212,9 @@ export interface SiteContent {
   about: About;
   experience: Experience[];
   projects: Project[];
-  skills: SkillGroup[];
+  hero: HeroCode;
+  skills: SkillCard[];
+  skillCategories: SkillCategoryDef[];
   education: Education[];
   events: Events;
   beyond: Beyond;
@@ -175,10 +223,14 @@ export interface SiteContent {
   seo: Seo;
   theme: Theme;
   contact: ContactSettings;
+  /** Content schema version (2 = old-portfolio redesign) */
+  version: number;
   updatedAt: string;
 }
 
-export type ContentKey = Exclude<keyof SiteContent, "updatedAt">;
+export const CONTENT_VERSION = 2;
+
+export type ContentKey = Exclude<keyof SiteContent, "updatedAt" | "version">;
 
 export interface Message {
   id: string;
