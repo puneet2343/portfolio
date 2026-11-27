@@ -13,6 +13,8 @@ export function withDefaults(stored: Partial<SiteContent> | null | undefined): S
     hero: { ...seed.hero, ...(s.hero ?? {}) },
     events: { ...seed.events, ...(s.events ?? {}) },
     beyond: { ...seed.beyond, ...(s.beyond ?? {}) },
+    art: { ...seed.art, ...(s.art ?? {}) },
+    projects: (s.projects ?? seed.projects).map((p) => ({ ...p, role: p.role ?? "", overview: p.overview ?? "", architecture: p.architecture ?? "", challenges: p.challenges ?? "", demoVideo: p.demoVideo ?? "", demoPoster: p.demoPoster ?? "", demoCaption: p.demoCaption ?? "" })),
     seo: { ...seed.seo, ...(s.seo ?? {}) },
     theme: { ...seed.theme, ...(s.theme ?? {}) },
     contact: { ...seed.contact, ...(s.contact ?? {}) },

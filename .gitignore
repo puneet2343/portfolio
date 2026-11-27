@@ -26,3 +26,6 @@ _screenshots/
 # local tooling notes
 AGENTS.md
 CLAUDE.md
+
+# web versions made by scripts/import-instagram.mjs
+/.import-cache/

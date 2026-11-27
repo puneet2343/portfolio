@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { Contact } from "@/components/site/Contact";
 import Ecosystem from "@/components/site/Ecosystem";
 import Events from "@/components/site/Events";
-import { FilmsSection } from "@/components/site/FilmsSection";
 import Hero from "@/components/site/Hero";
 import Journey from "@/components/site/Journey";
 import Projects from "@/components/site/Projects";
@@ -19,7 +18,6 @@ const RENDER: Partial<Record<SectionId, (c: SiteContent) => ReactNode>> = {
   },
   skills: (c) => (c.skills.length ? <Ecosystem skills={c.skills} categories={c.skillCategories} companies={COMPANIES} /> : null),
   projects: (c) => (c.projects.length ? <Projects projects={projectCards(c)} /> : null),
-  beyond: (c) => <FilmsSection c={c} />,
   events: (c) => <Events heading={c.events.heading} intro={c.events.intro} photos={c.events.photos} />,
   contact: (c) => <Contact c={c} />,
 };

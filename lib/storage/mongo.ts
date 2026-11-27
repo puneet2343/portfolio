@@ -1,5 +1,5 @@
 import { MongoClient, type Db } from "mongodb";
-import type { Message, SiteContent } from "../types";
+import type { ArtItem, Message, SiteContent } from "../types";
 import { buildStats, encodePathKey, today, withDefaults } from "./shared";
 import type { Store } from "./types";
 
@@ -17,6 +17,7 @@ function db(): Promise<Db> {
         await Promise.all([
           d.collection("ratelimits").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
           d.collection("messages").createIndex({ createdAt: -1 }),
+          d.collection("art").createIndex({ hashes: 1 }),
         ]).catch(() => undefined);
         return d;
       })
@@ -29,6 +30,7 @@ function db(): Promise<Db> {
 }
 
 type ContentDoc = { _id: string; data: SiteContent };
+type ArtDoc = Omit<ArtItem, "id"> & { _id: string };
 type MessageDoc = Omit<Message, "id"> & { _id: string };
 type ViewDoc = { _id: string; total: number; paths: Record<string, number> };
 type RateDoc = { _id: string; count: number; expiresAt: Date };
@@ -45,6 +47,25 @@ export const mongoStore: Store = {
     await (await db())
       .collection<ContentDoc>("content")
       .updateOne({ _id: "site" }, { $set: { data: content } }, { upsert: true });
+  },
+
+  async listArt() {
+    const docs = await (await db()).collection<ArtDoc>("art").find({}).limit(5000).toArray();
+    return docs.map(({ _id, ...rest }) => ({ id: _id, ...rest }) as ArtItem);
+  },
+  async getArt(id) {
+    const doc = await (await db()).collection<ArtDoc>("art").findOne({ _id: id });
+    if (!doc) return null;
+    const { _id, ...rest } = doc;
+    return { id: _id, ...rest } as ArtItem;
+  },
+  async saveArt(item) {
+    const { id, ...rest } = item;
+    await (await db()).collection<ArtDoc>("art").replaceOne({ _id: id }, rest, { upsert: true });
+  },
+  async deleteArt(id) {
+    const r = await (await db()).collection<ArtDoc>("art").deleteOne({ _id: id });
+    return r.deletedCount > 0;
   },
 
   async listMessages() {

@@ -23,9 +23,12 @@ export async function POST(req: NextRequest) {
       body,
       request: req,
       onBeforeGenerateToken: async (pathname) => {
-        if (!pathname.startsWith("portfolio/films/")) throw new Error("Bad upload path.");
+        const art = pathname.startsWith("portfolio/art/");
+        if (!pathname.startsWith("portfolio/films/") && !art) throw new Error("Bad upload path.");
         return {
-          allowedContentTypes: ["video/webm", "video/mp4", "video/quicktime"],
+          allowedContentTypes: art
+            ? ["video/webm", "video/mp4", "video/quicktime", "image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"]
+            : ["video/webm", "video/mp4", "video/quicktime"],
           maximumSizeInBytes: 200 * 1024 * 1024,
           addRandomSuffix: true,
         };

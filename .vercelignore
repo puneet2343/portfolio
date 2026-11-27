@@ -9,3 +9,4 @@ _screenshots
 AGENTS.md
 CLAUDE.md
 tsconfig.tsbuildinfo
+.import-cache

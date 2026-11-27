@@ -36,7 +36,19 @@ export default function Ecosystem({
   const [activeFilter, setActiveFilter] = useState<string>(filters[0].id);
   const wide = new Set(categories.filter((c) => c.wide).map((c) => c.id));
 
-  const filteredSkills = skills.filter((skill) => activeFilter === "ALL" || skill.category === activeFilter);
+  const [showAll, setShowAll] = useState(false);
+  const matching = skills.filter((skill) => activeFilter === "ALL" || skill.category === activeFilter);
+  // The overview shows the core tools first; everything else is one tap away.
+  const LIMIT = 12;
+  const overview = () => {
+    // Round-robin across categories so the overview covers every area, not just the first one.
+    const groups = filters.filter((c) => c.id !== "ALL").map((c) => matching.filter((x) => x.category === c.id && x.year));
+    const out: SkillCard[] = [];
+    for (let i = 0; out.length < LIMIT && groups.some((g) => g[i]); i++) for (const g of groups) if (g[i] && out.length < LIMIT) out.push(g[i]);
+    return out.length ? out : matching.slice(0, LIMIT);
+  };
+  const filteredSkills = activeFilter === "ALL" && !showAll ? overview() : matching;
+  const hidden = matching.length - filteredSkills.length;
 
   return (
     <section id="ecosystem" aria-labelledby="ecosystem-title" className="relative min-h-screen bg-transparent text-foreground font-sans py-12 md:py-24 lg:py-32 overflow-hidden">
@@ -89,6 +101,18 @@ export default function Ecosystem({
             ))}
           </AnimatePresence>
         </motion.div>
+        {activeFilter === "ALL" && (hidden > 0 || showAll) ? (
+          <div className="mt-8 flex justify-center md:mt-10">
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              aria-expanded={showAll}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-5 text-sm font-medium text-foreground/75 backdrop-blur-xl transition hover:bg-foreground/10 hover:text-foreground"
+            >
+              {showAll ? "Show fewer" : `Show all ${matching.length} skills`}
+            </button>
+          </div>
+        ) : null}
       </div>
     </section>
   );
@@ -153,7 +177,7 @@ const BentoCard = ({ skill, companies }: { skill: SkillCard; companies: Record<s
         {/* Experience line (years, no percentages) */}
         <div className="mt-auto pt-4 border-t border-foreground/5">
           <div className="flex justify-between items-end">
-            <span className="text-[10px] text-foreground/50 font-mono">IN USE SINCE {skill.year}</span>
+            <span className="text-[10px] text-foreground/50 font-mono">{skill.year ? `IN USE SINCE ${skill.year}` : "WORKING KNOWLEDGE"}</span>
             {years > 0 && (
               <span className="text-xs font-mono text-emerald-500">
                 {years}+ {years === 1 ? "yr" : "yrs"}

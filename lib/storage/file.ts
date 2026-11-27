@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import type { Message, SiteContent } from "../types";
+import type { ArtItem, Message, SiteContent } from "../types";
 import { buildStats, encodePathKey, memoryHit, memoryPeek, today, withDefaults } from "./shared";
 import type { Store } from "./types";
 
@@ -8,6 +8,7 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const CONTENT = path.join(DATA_DIR, "content.json");
 const MESSAGES = path.join(DATA_DIR, "messages.json");
 const VIEWS = path.join(DATA_DIR, "views.json");
+const ART = path.join(DATA_DIR, "art.json");
 
 type ViewsFile = Record<string, { total: number; paths: Record<string, number> }>;
 
@@ -53,6 +54,31 @@ export const fileStore: Store = {
   },
   async saveContent(content) {
     await locked(CONTENT, () => writeJson(CONTENT, content));
+  },
+
+  async listArt() {
+    return readJson<ArtItem[]>(ART, []);
+  },
+  async getArt(id) {
+    return (await readJson<ArtItem[]>(ART, [])).find((x) => x.id === id) ?? null;
+  },
+  async saveArt(item) {
+    await locked(ART, async () => {
+      const list = await readJson<ArtItem[]>(ART, []);
+      const i = list.findIndex((x) => x.id === item.id);
+      if (i === -1) list.push(item);
+      else list[i] = item;
+      await writeJson(ART, list);
+    });
+  },
+  async deleteArt(id) {
+    return locked(ART, async () => {
+      const list = await readJson<ArtItem[]>(ART, []);
+      const next = list.filter((x) => x.id !== id);
+      if (next.length === list.length) return false;
+      await writeJson(ART, next);
+      return true;
+    });
   },
 
   async listMessages() {

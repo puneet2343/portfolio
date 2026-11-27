@@ -74,8 +74,22 @@ export interface Project {
   repoUrl: string;
   tech: string[];
   problem: string;
+  /** My part, e.g. "Built v1 alone; co-develop the AWS version" */
+  role: string;
+  /** Case study: what I built (paragraph) */
+  overview: string;
+  /** Case study: how it is put together (paragraph) */
+  architecture: string;
+  /** Case study: hard parts and how they were solved (paragraph) */
+  challenges: string;
   built: string[];
   impact: string[];
+  /** Product demo video (web MP4) shown on the card and at the top of the case study */
+  demoVideo: string;
+  /** Poster frame for the demo video */
+  demoPoster: string;
+  /** Short line shown with the demo, e.g. "Attendee walkthrough" */
+  demoCaption: string;
   featured: boolean;
   published: boolean;
 }
@@ -207,6 +221,65 @@ export interface ContactSettings {
   formEnabled: boolean;
 }
 
+/** Filter tab on the Art page gallery. */
+export interface ArtCategory {
+  id: string;
+  label: string;
+}
+
+/** Settings of the Art page (/art). Items live in their own collection (see ArtItem). */
+export interface ArtSettings {
+  kicker: string;
+  heading: string;
+  headingAccent: string;
+  intro: string;
+  galleryHeading: string;
+  galleryIntro: string;
+  /** Hero reel on the Art page: a muted looping clip and its poster */
+  heroVideo: string;
+  heroPoster: string;
+  /** Instagram profile URL shown on the Art page (optional) */
+  instagramUrl: string;
+  categories: ArtCategory[];
+}
+
+export interface ArtMedia {
+  type: "image" | "video";
+  src: string;
+  /** Poster frame for videos (optional for images) */
+  poster: string;
+  /** Short muted low-res clip for hover previews (videos, optional) */
+  preview?: string;
+  width: number;
+  height: number;
+}
+
+/** One piece in the Art gallery: a reel/video, a photo or a carousel (several media). */
+export interface ArtItem {
+  id: string;
+  title: string;
+  caption: string;
+  /** id of an ArtCategory */
+  category: string;
+  media: ArtMedia[];
+  /** Thumbnail override; defaults to the first media's poster or image */
+  thumb: string;
+  /** Posted date, YYYY-MM-DD */
+  date: string;
+  /** Lower numbers show first; 0 = by date */
+  order: number;
+  featured: boolean;
+  published: boolean;
+  /** Where it came from: "instagram" (importer) or "admin" */
+  source: string;
+  /** Instagram account name for imported items */
+  account: string;
+  /** SHA-256 of the original files (importer idempotency) */
+  hashes: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface SiteContent {
   profile: Profile;
   about: About;
@@ -218,6 +291,7 @@ export interface SiteContent {
   education: Education[];
   events: Events;
   beyond: Beyond;
+  art: ArtSettings;
   social: SocialLink[];
   sections: SectionSetting[];
   seo: Seo;

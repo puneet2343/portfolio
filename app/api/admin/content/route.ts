@@ -45,6 +45,7 @@ export async function PATCH(req: NextRequest) {
     const next = { ...content, [key]: value, updatedAt: new Date().toISOString() };
     await store.saveContent(next);
     revalidatePath("/", "layout");
+    revalidatePath("/art");
     return Response.json({ ok: true, value, updatedAt: next.updatedAt });
   } catch (err) {
     console.error("content save failed", err);

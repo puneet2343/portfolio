@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, AnimatePresence, type Transition } from "motion/react";
-import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Layers, Globe, ArrowUpRight } from "lucide-react";
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Layers, Globe, ArrowUpRight, Play } from "lucide-react";
 import Link from "next/link";
 import { useState, type MouseEvent } from "react";
 import { SocialGlyph } from "./bits";
+import { DemoModal, type Demo } from "./DemoPlayer";
 
 export interface ProjectCardData {
   slug: string;
@@ -19,13 +20,16 @@ export interface ProjectCardData {
   built: string[];
   impact: string[];
   technologies: string[];
+  demo?: Demo;
 }
 
 const springTransition: Transition = { type: "spring", stiffness: 220, damping: 24, mass: 1.1 };
 
 function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardData; isExpanded: boolean; onToggle: () => void }) {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-  const images = project.images;
+  const [demoOpen, setDemoOpen] = useState(false);
+  const demo = project.demo;
+  const images = project.images.length ? project.images : demo?.poster ? [demo.poster] : [];
   const hasMultipleImages = images.length > 1;
 
   const nextImage = (e: MouseEvent<HTMLButtonElement>) => {
@@ -135,6 +139,26 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
         )}
 
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-50" />
+
+        {demo ? (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDemoOpen(true);
+            }}
+            aria-label={`Play the ${project.title} product demo`}
+            className="group/demo absolute inset-0 z-[15] flex items-center justify-center"
+          >
+            <span className="force-dark relative flex h-14 w-14 items-center justify-center rounded-full border border-white/25 bg-black/30 text-white shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-transform duration-300 group-hover/demo:scale-110 sm:h-16 sm:w-16">
+              <span aria-hidden className="absolute inset-0 animate-ping rounded-full border border-white/20 [animation-duration:2.4s]" />
+              <Play className="h-5 w-5 translate-x-0.5 fill-current sm:h-6 sm:w-6" />
+            </span>
+            <span className="force-dark absolute bottom-3 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Product demo
+            </span>
+          </button>
+        ) : null}
 
         <div className="absolute top-4 right-4 flex gap-2 z-20">
           <AnimatePresence>
@@ -293,9 +317,9 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
                         >
                           <div className="flex items-center gap-3">
                             <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-400/70 group-hover/btn:text-indigo-400 transition-colors" />
-                            <span className="text-xs sm:text-sm font-semibold text-indigo-300/70 group-hover/btn:text-indigo-300 transition-colors">Live Demo</span>
+                            <span className="text-xs sm:text-sm font-semibold text-indigo-300/70 group-hover/btn:text-indigo-300 transition-colors">Visit website</span>
                           </div>
-                          <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-indigo-500/50 group-hover/btn:text-indigo-400/50 transition-colors">Preview</div>
+                          <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-indigo-500/50 group-hover/btn:text-indigo-400/50 transition-colors">Live</div>
                         </a>
                       )}
 
@@ -342,6 +366,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
           )}
         </AnimatePresence>
       </motion.div>
+      <AnimatePresence>{demo && demoOpen ? <DemoModal demo={demo} title={project.title} onClose={() => setDemoOpen(false)} /> : null}</AnimatePresence>
     </motion.div>
   );
 }

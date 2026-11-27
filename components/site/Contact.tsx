@@ -1,5 +1,5 @@
 import { ArrowUpRight, Download } from "lucide-react";
-import Link from "next/link";
+import { FooterSideLink } from "./FooterSideLink";
 import type { SiteContent } from "@/lib/types";
 import { SocialGlyph } from "./bits";
 import { ContactForm } from "./ContactForm";
@@ -119,12 +119,7 @@ export function Footer({ c }: { c: SiteContent }) {
               </li>
             ))}
             <li>
-              <Link
-                href="/films"
-                className="flex h-11 items-center rounded-full border border-white/10 bg-white/5 px-4 text-xs font-medium text-foreground/70 transition hover:bg-white/10 hover:text-foreground"
-              >
-                Films
-              </Link>
+              <FooterSideLink />
             </li>
           </ul>
           <p className="text-[11px] font-mono uppercase tracking-widest text-foreground/40">

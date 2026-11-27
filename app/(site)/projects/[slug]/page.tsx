@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Photo, SocialGlyph } from "@/components/site/bits";
+import { DemoPlayer } from "@/components/site/DemoPlayer";
 import { getPublicContent } from "@/lib/content";
 
 export const revalidate = 3600;
@@ -76,7 +77,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                   rel="noopener noreferrer"
                   className="inline-flex h-12 items-center gap-2 rounded-full bg-foreground px-6 text-sm font-semibold text-background transition hover:scale-[1.02]"
                 >
-                  <Globe className="h-4 w-4" aria-hidden /> Live demo <ArrowUpRight className="h-4 w-4" aria-hidden />
+                  <Globe className="h-4 w-4" aria-hidden /> Visit website <ArrowUpRight className="h-4 w-4" aria-hidden />
                 </a>
               ) : null}
               {p.repoUrl ? (
@@ -93,6 +94,16 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
           ) : null}
         </header>
 
+        {p.demoVideo ? (
+          <figure className="mt-10">
+            <DemoPlayer demo={{ src: p.demoVideo, poster: p.demoPoster || p.cover, caption: p.demoCaption }} title={p.title} />
+            {p.demoCaption ? (
+              <figcaption className="mt-3 flex items-center gap-2 text-xs text-foreground/55">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden /> {p.demoCaption}
+              </figcaption>
+            ) : null}
+          </figure>
+        ) : (
         <div className="relative mt-10 overflow-hidden rounded-2xl border border-foreground/20 shadow-[0_0_80px_-20px_rgba(255,255,255,0.05)]">
           <div className="absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r from-transparent via-foreground/50 to-transparent" />
           <div className="relative aspect-[16/10] sm:aspect-[2/1] bg-foreground/[0.02]">
@@ -107,6 +118,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
             <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent opacity-60" />
           </div>
         </div>
+        )}
 
         <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-12">
           <div className="space-y-10 lg:col-span-3">
@@ -114,6 +126,12 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               <section className="space-y-5">
                 <Rule label="The Problem" />
                 <p className="text-base sm:text-lg font-light leading-relaxed text-foreground/80">{p.problem}</p>
+              </section>
+            ) : null}
+            {p.overview ? (
+              <section className="space-y-5">
+                <Rule label="What I Built" />
+                <p className="text-sm sm:text-base font-light leading-relaxed text-foreground/80">{p.overview}</p>
               </section>
             ) : null}
             {p.built.length ? (
@@ -127,6 +145,18 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                     </div>
                   ))}
                 </div>
+              </section>
+            ) : null}
+            {p.architecture ? (
+              <section className="space-y-5">
+                <Rule label="Architecture" />
+                <p className="text-sm sm:text-base font-light leading-relaxed text-foreground/80">{p.architecture}</p>
+              </section>
+            ) : null}
+            {p.challenges ? (
+              <section className="space-y-5">
+                <Rule label="Challenges" />
+                <p className="text-sm sm:text-base font-light leading-relaxed text-foreground/80">{p.challenges}</p>
               </section>
             ) : null}
             {p.impact.length ? (
@@ -168,6 +198,12 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                   ))}
                 </div>
               </div>
+              {p.role ? (
+                <div className="border-t border-foreground/5 pt-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/50">My role</p>
+                  <p className="mt-1 text-sm leading-relaxed">{p.role}</p>
+                </div>
+              ) : null}
               {p.period ? (
                 <div className="border-t border-foreground/5 pt-5">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/50">When</p>
@@ -183,9 +219,9 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                 >
                   <span className="flex items-center gap-3">
                     <Globe className="h-5 w-5 text-indigo-400/70 group-hover/btn:text-indigo-400" />
-                    <span className="text-sm font-semibold text-indigo-300/70 group-hover/btn:text-indigo-300">Live Demo</span>
+                    <span className="text-sm font-semibold text-indigo-300/70 group-hover/btn:text-indigo-300">Visit website</span>
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-500/50">Preview</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-500/50">Live</span>
                 </a>
               ) : null}
             </div>

@@ -1,4 +1,4 @@
-import type { ContentKey, SiteContent } from "./types";
+import type { ArtItem, ArtMedia, ContentKey, SiteContent } from "./types";
 
 /**
  * Tiny shape-based sanitiser for admin edits: keeps only known fields, coerces types,
@@ -26,7 +26,8 @@ const shapes: Record<ContentKey, Shape> = {
   projects: [
     {
       id: "s", slug: "s", title: "s", tagline: "t", context: "s", period: "s", cover: "u", gallery: UA,
-      liveUrl: "u", repoUrl: "u", tech: SA, problem: "t", built: TA, impact: TA, featured: "b", published: "b",
+      liveUrl: "u", repoUrl: "u", tech: SA, problem: "t", role: "s", overview: "t", architecture: "t", challenges: "t", built: TA, impact: TA, demoVideo: "u", demoPoster: "u", demoCaption: "s",
+      featured: "b", published: "b",
     },
   ],
   hero: { role: "s", company: "s", location: "s", hire: "s", skills: [{ key: "s", items: SA }], readme: "t", styles: "t" },
@@ -49,6 +50,10 @@ const shapes: Record<ContentKey, Shape> = {
         rotate: "b", videoRight: "b", theme: "s", published: "b",
       },
     ],
+  },
+  art: {
+    kicker: "s", heading: "s", headingAccent: "s", intro: "t", galleryHeading: "s", galleryIntro: "t", instagramUrl: "u", heroVideo: "u", heroPoster: "u",
+    categories: [{ id: "s", label: "s" }],
   },
   social: [{ id: "s", label: "s", url: "u", icon: "s", published: "b" }],
   sections: [{ id: "s", label: "s", visible: "b" }],
@@ -95,7 +100,7 @@ export function slugify(s: string) {
 }
 
 const ICONS = new Set(["github", "linkedin", "email", "website", "x", "youtube", "instagram"]);
-const SECTIONS = new Set(["about", "experience", "projects", "skills", "education", "events", "beyond", "contact"]);
+const SECTIONS = new Set(["about", "experience", "projects", "skills", "education", "events", "contact"]);
 
 export function sanitizeContentPart<K extends ContentKey>(key: K, value: unknown): SiteContent[K] {
   const v = sanitize(value, shapes[key]) as never;
@@ -136,6 +141,17 @@ export function sanitizeContentPart<K extends ContentKey>(key: K, value: unknown
     for (const c of list) c.id = (c.id || c.label).toUpperCase().replace(/[^A-Z0-9_-]/g, "") || "OTHER";
     if (!list.some((c) => c.id === "ALL")) list.unshift({ id: "ALL", label: "Ecosystem", wide: false });
   }
+  if (key === "art") {
+    const a = v as unknown as SiteContent["art"];
+    const seen = new Set<string>();
+    a.categories = a.categories.filter((c) => {
+      c.id = slugify(c.id || c.label);
+      if (!c.label) c.label = c.id;
+      if (seen.has(c.id)) return false;
+      seen.add(c.id);
+      return true;
+    });
+  }
   if (key === "social") {
     for (const s of v as unknown as SiteContent["social"]) if (!ICONS.has(s.icon)) s.icon = "website";
   }
@@ -151,4 +167,48 @@ export function sanitizeContentPart<K extends ContentKey>(key: K, value: unknown
     if (t.defaultMode !== "dark" && t.defaultMode !== "light") t.defaultMode = "system";
   }
   return v;
+}
+
+const ART_ITEM: Shape = {
+  id: "s", title: "s", caption: "t", category: "s", thumb: "u", date: "s", featured: "b", published: "b",
+  source: "s", account: "s", hashes: SA,
+  media: [{ type: "s", src: "u", poster: "u", preview: "u" }],
+};
+
+const VIDEO_EXT = /\.(mp4|webm|mov|m4v)(\?|#|$)/i;
+const IMAGE_EXT = /\.(jpe?g|png|webp|gif|avif)(\?|#|$)/i;
+
+/** Clean an art item coming from the admin. Keeps server-managed fields (source, hashes, createdAt) from `prev`. */
+export function sanitizeArtItem(value: unknown, prev?: ArtItem): ArtItem {
+  const raw = (value && typeof value === "object" ? value : {}) as Record<string, unknown>;
+  const v = sanitize(raw, ART_ITEM) as Omit<ArtItem, "order" | "createdAt" | "updatedAt">;
+  const rawMedia = Array.isArray(raw.media) ? (raw.media as Record<string, unknown>[]) : [];
+  const media: ArtMedia[] = (v.media as unknown as { type: string; src: string; poster: string; preview: string }[])
+    .slice(0, 20)
+    .map((m, i) => ({
+      type: VIDEO_EXT.test(m.src) || (m.type === "video" && !IMAGE_EXT.test(m.src)) ? ("video" as const) : ("image" as const),
+      src: m.src,
+      poster: m.poster,
+      preview: m.preview,
+      width: Math.max(0, Math.round(Number(rawMedia[i]?.width) || 0)),
+      height: Math.max(0, Math.round(Number(rawMedia[i]?.height) || 0)),
+    }))
+    .filter((m) => m.src);
+  const order = Number(raw.order);
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(v.date) ? v.date : "";
+  const now = new Date().toISOString();
+  return {
+    ...v,
+    id: prev?.id || v.id || Math.random().toString(36).slice(2, 12),
+    title: v.title,
+    category: slugify(v.category || "reels"),
+    media,
+    date,
+    order: Number.isFinite(order) ? Math.max(-9999, Math.min(9999, Math.round(order))) : 0,
+    source: prev?.source || v.source || "admin",
+    account: prev?.account ?? v.account,
+    hashes: prev?.hashes ?? v.hashes,
+    createdAt: prev?.createdAt || now,
+    updatedAt: now,
+  };
 }

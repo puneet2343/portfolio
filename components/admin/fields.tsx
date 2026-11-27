@@ -200,7 +200,7 @@ export function MediaInput({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  accept?: "image" | "pdf" | "video";
+  accept?: "image" | "pdf" | "video" | "media";
   help?: string;
 }) {
   const id = useId();
@@ -213,11 +213,11 @@ export function MediaInput({
   async function upload(file: File) {
     setBusy(true);
     try {
-      if (accept === "video") {
+      if (accept === "video" || accept === "media") {
         // Large files go straight from the browser to Vercel Blob (token issued by /api/admin/blob).
         const { upload: blobUpload } = await import("@vercel/blob/client");
         const safe = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").slice(-60);
-        const res = await blobUpload(`portfolio/films/${safe}`, file, {
+        const res = await blobUpload(`portfolio/${accept === "media" ? "art" : "films"}/${safe}`, file, {
           access: "public",
           handleUploadUrl: "/api/admin/blob",
           contentType: file.type || "video/webm",
@@ -225,7 +225,7 @@ export function MediaInput({
           onUploadProgress: (e) => setPct(Math.round(e.percentage)),
         });
         onChange(res.url);
-        toast("Video uploaded. Remember to save.");
+        toast(`${file.type.startsWith("image/") ? "Image" : "Video"} uploaded. Remember to save.`);
         return;
       }
       const fd = new FormData();
@@ -248,9 +248,9 @@ export function MediaInput({
       <Label htmlFor={id} label={label} help={help} />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         {value ? (
-          accept === "video" ? (
+          accept === "video" || (accept === "media" && /\.(mp4|webm|mov|m4v)(\?|$)/i.test(value)) ? (
             <video src={value} muted playsInline preload="metadata" className="h-16 w-24 shrink-0 rounded-xl border border-line bg-black object-cover" />
-          ) : accept === "image" ? (
+          ) : accept === "image" || accept === "media" ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={value} alt="" className="h-16 w-16 shrink-0 rounded-xl border border-line object-cover" />
           ) : (
@@ -259,11 +259,19 @@ export function MediaInput({
             </a>
           )
         ) : null}
-        <input id={id} value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={accept === "pdf" ? "/resume/file.pdf or https://…" : accept === "video" ? "/videos/… or https://…" : "/images/… or https://…"} className={inputCls} />
+        <input id={id} value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={accept === "pdf" ? "/resume/file.pdf or https://…" : accept === "video" || accept === "media" ? "/videos/… or https://…" : "/images/… or https://…"} className={inputCls} />
         <input
           ref={fileRef}
           type="file"
-          accept={accept === "pdf" ? "application/pdf" : accept === "video" ? "video/webm,video/mp4,video/quicktime" : "image/png,image/jpeg,image/webp,image/gif,image/avif"}
+          accept={
+            accept === "pdf"
+              ? "application/pdf"
+              : accept === "video"
+                ? "video/webm,video/mp4,video/quicktime"
+                : accept === "media"
+                  ? "video/webm,video/mp4,video/quicktime,image/png,image/jpeg,image/webp,image/gif,image/avif"
+                  : "image/png,image/jpeg,image/webp,image/gif,image/avif"
+          }
           className="hidden"
           onChange={(e) => {
             const f = e.target.files?.[0];

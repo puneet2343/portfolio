@@ -1,4 +1,4 @@
-import type { Message, SiteContent, ViewStats } from "../types";
+import type { ArtItem, Message, SiteContent, ViewStats } from "../types";
 
 export type StoreKind = "file" | "mongo" | "readonly";
 
@@ -8,6 +8,11 @@ export interface Store {
   writable: boolean;
   getContent(): Promise<SiteContent>;
   saveContent(content: SiteContent): Promise<void>;
+  /** Art gallery items (all, including hidden ones) */
+  listArt(): Promise<ArtItem[]>;
+  getArt(id: string): Promise<ArtItem | null>;
+  saveArt(item: ArtItem): Promise<void>;
+  deleteArt(id: string): Promise<boolean>;
   listMessages(): Promise<Message[]>;
   addMessage(message: Message): Promise<void>;
   setMessageRead(id: string, read: boolean): Promise<boolean>;

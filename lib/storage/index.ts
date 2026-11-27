@@ -16,6 +16,18 @@ const readOnlyStore: Store = {
   async saveContent() {
     throw new ReadOnlyError();
   },
+  async listArt() {
+    return [];
+  },
+  async getArt() {
+    return null;
+  },
+  async saveArt() {
+    throw new ReadOnlyError();
+  },
+  async deleteArt() {
+    throw new ReadOnlyError();
+  },
   async listMessages() {
     return [];
   },

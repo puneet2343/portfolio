@@ -3,7 +3,7 @@ import { Header } from "@/components/site/Header";
 import SmoothScroll from "@/components/site/SmoothScroll";
 import { Tracker } from "@/components/site/Tracker";
 import { getPublicContent } from "@/lib/content";
-import { navItems } from "@/lib/site-data";
+import { artNavItems, navItems } from "@/lib/site-data";
 
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
   const c = await getPublicContent();
@@ -17,7 +17,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
         Skip to content
       </a>
       <SmoothScroll />
-      <Header name={c.profile.name} nav={navItems(c)} resumeUrl={c.profile.resumeUrl} />
+      <Header name={c.profile.name} nav={navItems(c)} artNav={artNavItems(c)} resumeUrl={c.profile.resumeUrl} />
       <main id="main">{children}</main>
       <Footer c={c} />
       <Tracker />

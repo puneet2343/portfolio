@@ -1,7 +1,7 @@
 import "server-only";
 import { cache } from "react";
 import { getStore } from "./storage";
-import type { SiteContent } from "./types";
+import type { ArtItem, SiteContent } from "./types";
 
 export const getContent = cache(async (): Promise<SiteContent> => {
   const store = await getStore();
@@ -21,6 +21,28 @@ export const getPublicContent = cache(async (): Promise<SiteContent> => {
     beyond: { ...c.beyond, items: c.beyond.items.filter((x) => x.published) },
     social: c.social.filter((x) => x.published && x.url),
   };
+});
+
+/** Sort for the gallery: pinned order first (lower first), then newest. */
+export function sortArt(list: ArtItem[]) {
+  return [...list].sort((a, b) => {
+    const ao = a.order || 0;
+    const bo = b.order || 0;
+    if (ao !== bo) return (ao === 0 ? 1e6 : ao) - (bo === 0 ? 1e6 : bo);
+    return (b.date || b.createdAt || "").localeCompare(a.date || a.createdAt || "");
+  });
+}
+
+/** Published art items with at least one media file, in gallery order. */
+export const getPublicArt = cache(async (): Promise<ArtItem[]> => {
+  const store = await getStore();
+  try {
+    const list = await store.listArt();
+    return sortArt(list.filter((x) => x.published && x.media?.length));
+  } catch (err) {
+    console.error("art load failed", err);
+    return [];
+  }
 });
 
 export function siteUrl(c: SiteContent) {

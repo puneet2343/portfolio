@@ -6,13 +6,13 @@ import { ColorInput, LinesInput, MediaInput, SelectInput, TagsInput, TextArea, T
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Field =
-  | { k: string; label: string; type: "text" | "email" | "url"; help?: string; placeholder?: string; half?: boolean }
+  | { k: string; label: string; type: "text" | "email" | "url" | "date" | "number"; help?: string; placeholder?: string; half?: boolean }
   | { k: string; label: string; type: "textarea"; help?: string; rows?: number }
   | { k: string; label: string; type: "lines" | "paragraphs"; help?: string }
   | { k: string; label: string; type: "tags"; help?: string; half?: boolean }
   | { k: string; label: string; type: "toggle"; help?: string }
   | { k: string; label: string; type: "color"; help?: string; half?: boolean }
-  | { k: string; label: string; type: "image" | "pdf" | "video"; help?: string }
+  | { k: string; label: string; type: "image" | "pdf" | "video" | "media"; help?: string; half?: boolean }
   | { k: string; label: string; type: "select"; options: { value: string; label: string }[]; half?: boolean }
   | { k: string; label: string; type: "list"; item: Field[]; newItem: () => any; titleOf: (x: any) => string; addLabel: string; help?: string };
 
@@ -28,7 +28,11 @@ export function ObjectForm({ fields, value, onChange }: { fields: Field[]; value
           case "text":
           case "email":
           case "url":
+          case "date":
             el = <TextInput label={f.label} help={f.help} type={f.type} placeholder={f.placeholder} value={v ?? ""} onChange={(x) => set(f.k, x)} />;
+            break;
+          case "number":
+            el = <TextInput label={f.label} help={f.help} type="number" placeholder={f.placeholder} value={String(v ?? 0)} onChange={(x) => set(f.k, Number(x) || 0)} />;
             break;
           case "textarea":
             el = <TextArea label={f.label} help={f.help} rows={f.rows} value={v ?? ""} onChange={(x) => set(f.k, x)} />;
@@ -49,6 +53,7 @@ export function ObjectForm({ fields, value, onChange }: { fields: Field[]; value
           case "image":
           case "pdf":
           case "video":
+          case "media":
             el = <MediaInput label={f.label} help={f.help} accept={f.type} value={v ?? ""} onChange={(x) => set(f.k, x)} />;
             break;
           case "select":

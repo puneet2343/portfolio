@@ -7,7 +7,6 @@ export const SECTION_DOM_ID: Partial<Record<SectionId, string>> = {
   experience: "journey",
   skills: "ecosystem",
   projects: "projects",
-  beyond: "films",
   events: "events",
   contact: "contact",
 };
@@ -19,11 +18,15 @@ export function navItems(c: SiteContent) {
       if (s.id === "experience") return c.experience.length + c.education.length > 0;
       if (s.id === "skills") return c.skills.length > 0;
       if (s.id === "projects") return c.projects.length > 0;
-      if (s.id === "beyond") return c.beyond.items.length > 0;
       if (s.id === "events") return c.events.photos.length > 0;
       return true;
     })
     .map((s) => ({ id: SECTION_DOM_ID[s.id] as string, label: s.label }));
+}
+
+/** Header links on the Art side (/art). */
+export function artNavItems(c: SiteContent) {
+  return [{ id: "gallery", label: c.art.galleryHeading || "Gallery" }, ...(c.beyond.items.length ? [{ id: "films", label: "Films" }] : [])];
 }
 
 const period = (a: string, b: string) => [a, b].filter(Boolean).join(" - ");
@@ -71,6 +74,7 @@ export function projectCards(c: SiteContent): ProjectCardData[] {
     built: p.built,
     impact: p.impact,
     technologies: p.tech,
+    demo: p.demoVideo ? { src: p.demoVideo, poster: p.demoPoster, caption: p.demoCaption } : undefined,
   }));
 }
 

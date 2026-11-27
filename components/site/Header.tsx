@@ -5,6 +5,7 @@ import { Download, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ModeSwitch, modeOf } from "./ModeSwitch";
 import { scrollToId } from "./SmoothScroll";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -38,9 +39,14 @@ function Magnetic({ children, strength = 0.35 }: { children: ReactNode; strength
   );
 }
 
-export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[]; resumeUrl: string }) {
+export function Header({ name, nav: proNav, artNav, resumeUrl }: { name: string; nav: NavItem[]; artNav: NavItem[]; resumeUrl: string }) {
   const pathname = usePathname();
-  const onHome = pathname === "/";
+  const mode = modeOf(pathname);
+  // Each side has its own base page and its own sections.
+  const base = mode === "art" ? "/art" : "/";
+  const nav = mode === "art" ? artNav : proNav;
+  const onHome = pathname === base;
+  const hrefOf = (id: string) => (id === "top" ? base : base === "/" ? `/#${id}` : `${base}#${id}`);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -63,7 +69,7 @@ export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[];
   // Which section is in the middle of the screen
   useEffect(() => {
     if (!onHome) {
-      setActive(pathname.startsWith("/films") ? "films" : pathname.startsWith("/projects") ? "projects" : "");
+      setActive(pathname.startsWith("/projects") ? "projects" : "");
       return;
     }
     const els = nav.map((n) => document.getElementById(n.id)).filter(Boolean) as HTMLElement[];
@@ -105,7 +111,7 @@ export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[];
     setOpen(false);
     // let the menu close (and Lenis restart) before scrolling
     setTimeout(() => {
-      if (scrollToId(id)) history.replaceState(null, "", id === "top" ? "/" : `/#${id}`);
+      if (scrollToId(id)) history.replaceState(null, "", hrefOf(id));
     }, open ? 120 : 0);
   }
 
@@ -127,7 +133,7 @@ export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[];
           <span aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
           <Link
-            href="/"
+            href={base}
             onClick={(e) => go(e, "top")}
             className="group flex min-h-11 shrink-0 items-center gap-2.5 rounded-full pl-1 pr-3"
             aria-label={`${name}, back to top`}
@@ -148,7 +154,7 @@ export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[];
                   <li key={n.id}>
                     <Magnetic>
                       <Link
-                        href={`/#${n.id}`}
+                        href={hrefOf(n.id)}
                         onClick={(e) => go(e, n.id)}
                         aria-current={isActive ? "true" : undefined}
                         className={`relative flex h-11 items-center rounded-full px-3.5 text-[13px] font-medium transition-colors lg:px-4 ${
@@ -172,6 +178,9 @@ export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[];
           </nav>
 
           <div className="flex shrink-0 items-center gap-1">
+            <span className="hidden md:inline-flex">
+              <ModeSwitch layoutId="mode-thumb-desktop" />
+            </span>
             <ThemeToggle />
             <Magnetic strength={0.25}>
               <a
@@ -236,6 +245,15 @@ export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[];
               </button>
             </div>
 
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: 0.05 } }}
+              exit={{ opacity: 0 }}
+              className="relative px-5 pt-5"
+            >
+              <ModeSwitch layoutId="mode-thumb-mobile" size="lg" onSwitch={() => setOpen(false)} />
+            </motion.div>
+
             <nav aria-label="Sections" className="relative flex flex-1 flex-col justify-center px-6 py-8">
               <motion.ul
                 initial="hidden"
@@ -253,7 +271,7 @@ export function Header({ name, nav, resumeUrl }: { name: string; nav: NavItem[];
                     }}
                   >
                     <Link
-                      href={n.id === "top" ? "/" : `/#${n.id}`}
+                      href={hrefOf(n.id)}
                       onClick={(e) => {
                         if (!onHome) setOpen(false);
                         go(e, n.id);
