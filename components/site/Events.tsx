@@ -44,7 +44,7 @@ export default function Events({ heading, intro, photos }: { heading: string; in
             {first} <br className="hidden sm:block" /> <span className="text-foreground/50">{last}.</span>
           </h2>
           <div className="max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5 backdrop-blur-xl">
-            <p className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-emerald-500">
+            <p className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-emerald-500">
               <CalendarDays size={12} aria-hidden /> Latest
             </p>
             <p className="mt-2 text-sm leading-relaxed text-foreground/80">{intro}</p>

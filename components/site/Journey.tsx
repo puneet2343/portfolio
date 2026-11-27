@@ -93,14 +93,13 @@ export default function Journey({ items, title = "The", accent = "Journey.", sub
         cards.forEach((card, i) => {
           gsap.fromTo(
             card,
-            { opacity: 0, y: 100, scale: 0.9 },
+            { opacity: 0, y: 48 },
             {
               opacity: 1,
               y: 0,
-              scale: 1,
-              duration: 0.8,
+              duration: 0.9,
               ease: "power3.out",
-              scrollTrigger: { trigger: card, start: "top 85%", end: "top 50%", toggleActions: "play none none reverse" },
+              scrollTrigger: { trigger: card, start: "top 92%", toggleActions: "play none none none" },
             },
           );
           const connector = card.querySelector(".connector-line");
@@ -127,7 +126,7 @@ export default function Journey({ items, title = "The", accent = "Journey.", sub
           gsap.fromTo(
             card,
             { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" } },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", scrollTrigger: { trigger: card, start: "top 95%", toggleActions: "play none none none" } },
           );
         });
       });
@@ -138,7 +137,7 @@ export default function Journey({ items, title = "The", accent = "Journey.", sub
   );
 
   return (
-    <section id="journey" ref={container} aria-labelledby="journey-title" className="relative w-full bg-background text-foreground font-sans z-10 min-h-screen pb-16 md:pb-24">
+    <section id="journey" ref={container} aria-labelledby="journey-title" className="relative w-full bg-background text-foreground font-sans z-10 pb-4 md:pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 grid grid-cols-1 md:grid-cols-12 md:gap-8">
         {/* LEFT COLUMN: normal flow on mobile, pinned on desktop */}
         <div ref={leftCol} className="md:col-span-5 flex flex-col justify-center pt-24 pb-8 md:py-0 md:h-screen">
@@ -146,7 +145,7 @@ export default function Journey({ items, title = "The", accent = "Journey.", sub
             <h2 id="journey-title" className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter text-foreground mb-4 md:mb-6">
               {title} <span className="text-foreground/50">{accent}</span>
             </h2>
-            <p className="text-foreground/70 md:text-foreground/80 text-base md:text-xl font-light tracking-wide max-w-sm mb-0 md:mb-8">{subtitle}</p>
+            <p className="text-foreground/70 md:text-foreground/80 text-base md:text-xl tracking-normal max-w-sm mb-0 md:mb-8">{subtitle}</p>
             <div className="hidden md:block">
               <p className="text-xs font-mono text-emerald-500 mb-2 uppercase tracking-widest">Currently Viewing</p>
               <div key={activeCompany}>
@@ -157,7 +156,7 @@ export default function Journey({ items, title = "The", accent = "Journey.", sub
         </div>
 
         {/* RIGHT COLUMN: scrollable timeline */}
-        <div className="md:col-span-7 relative pt-8 pb-8 md:pt-[50vh] md:pb-[20vh]">
+        <div className="md:col-span-7 relative pt-8 pb-8 md:pt-[18vh] md:pb-[12vh]">
           <div className="hidden md:block absolute left-0 top-0 bottom-0 w-px">
             <div className="absolute inset-0 w-[1px] bg-gradient-to-b from-transparent via-foreground/20 to-foreground/20 h-full opacity-50" />
             <div ref={meteorRef} className="absolute top-0 left-0 w-[1px] bg-gradient-to-b from-transparent via-white/50 to-white z-20 h-0 overflow-visible">
@@ -170,7 +169,7 @@ export default function Journey({ items, title = "The", accent = "Journey.", sub
             </div>
           </div>
 
-          <div className="flex flex-col gap-12 md:gap-32">
+          <div className="flex flex-col gap-8 md:gap-16">
             {items.map((item, index) => (
               <TimelineItem key={item.id} data={item} index={index} />
             ))}
@@ -201,7 +200,7 @@ const SpotlightCard = ({ data, index }: { data: TimelineData; index: number }) =
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden bg-background/60 border border-white/10 backdrop-blur-md group/card transition-all duration-500 hover:border-white/20 shadow-2xl shadow-black/50"
+      className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden bg-[var(--glass-strong)] border border-[var(--line)] backdrop-blur-xl group/card transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1 hover:border-foreground/20 shadow-[var(--glass-shadow)] hover:shadow-[0_24px_60px_-20px_rgba(0,0,0,0.25)]"
     >
       <motion.div className="hidden md:block pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover/card:opacity-100 z-10" style={{ background: spot1 }} />
       <motion.div className="hidden md:block pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover/card:opacity-100 z-20" style={{ background: spot2 }} />
@@ -216,8 +215,8 @@ const SpotlightCard = ({ data, index }: { data: TimelineData; index: number }) =
             )}
           </div>
           <div className="flex flex-col pt-0 sm:pt-1">
-            <span className="text-[10px] md:text-[9px] font-mono uppercase tracking-widest text-foreground/50 group-hover/card:text-foreground transition-colors">{data.period}</span>
-            <span className="text-[10px] md:text-[9px] font-mono text-foreground/50 mt-0.5">{data.location}</span>
+            <span className="text-[11px] md:text-xs font-mono uppercase tracking-wider text-foreground/50 group-hover/card:text-foreground transition-colors">{data.period}</span>
+            <span className="text-[11px] md:text-xs font-mono text-foreground/50 mt-0.5">{data.location}</span>
           </div>
         </div>
 
@@ -225,21 +224,21 @@ const SpotlightCard = ({ data, index }: { data: TimelineData; index: number }) =
           <div className="mb-3 md:mb-4">
             <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground mb-1 group-hover/card:text-foreground/90 transition-colors tracking-tight">{data.role}</h3>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-foreground/80 font-medium text-xs md:text-sm">{data.company}</span>
+              <span className="text-foreground/80 font-medium text-sm md:text-[15px]">{data.company}</span>
               <span className="w-1 h-1 rounded-full bg-foreground/50" />
-              <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] md:text-[9px] font-medium text-foreground/60 uppercase tracking-wide">{data.type}</span>
+              <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] md:text-[11px] font-medium text-foreground/60 uppercase tracking-wide">{data.type}</span>
             </div>
           </div>
 
-          <p className="text-foreground/80 md:text-foreground/90 text-sm leading-relaxed font-light mb-4 md:mb-5 border-l border-white/10 md:border-white/20 pl-3 md:pl-4 group-hover/card:border-white/40 transition-colors">
+          <p className="text-foreground/80 md:text-foreground/90 text-[15px] md:text-base leading-relaxed mb-4 md:mb-5 border-l border-white/10 md:border-white/20 pl-3 md:pl-4 group-hover/card:border-white/40 transition-colors">
             {data.description}
           </p>
 
           {data.points.length > 0 && (
             <ul className="space-y-2 mb-5 md:mb-6">
               {data.points.map((point, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-foreground/70 group-hover/card:text-foreground/90 transition-colors">
-                  <span className="mt-1.5 w-1 h-1 rounded-full bg-foreground/50 group-hover/card:bg-foreground transition-colors shadow-[0_0_5px_rgba(255,255,255,0)] group-hover/card:shadow-[0_0_5px_rgba(255,255,255,0.5)] shrink-0" />
+                <li key={i} className="flex items-start gap-2.5 text-sm md:text-[15px] leading-relaxed text-foreground/75 group-hover/card:text-foreground/90 transition-colors">
+                  <span className="mt-2 w-1 h-1 rounded-full bg-foreground/50 group-hover/card:bg-foreground transition-colors shadow-[0_0_5px_rgba(255,255,255,0)] group-hover/card:shadow-[0_0_5px_rgba(255,255,255,0.5)] shrink-0" />
                   {point}
                 </li>
               ))}
@@ -250,19 +249,11 @@ const SpotlightCard = ({ data, index }: { data: TimelineData; index: number }) =
             {data.tech.map((t, i) => (
               <span
                 key={i}
-                className="px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.08] text-[9px] md:text-[10px] font-medium text-foreground/70 md:hover:text-foreground md:hover:bg-white/10 md:hover:border-white/20 transition-all duration-300 cursor-default tracking-wide"
+                className="px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.08] text-[11px] md:text-xs font-medium text-foreground/70 md:hover:text-foreground md:hover:bg-white/10 md:hover:border-white/20 transition-all duration-300 cursor-default tracking-wide"
               >
                 {t}
               </span>
             ))}
-          </div>
-        </div>
-
-        <div className="hidden xl:block absolute top-6 right-6">
-          <div className="flex flex-col items-end gap-0.5 opacity-20 group-hover/card:opacity-50 transition-opacity">
-            <div className="w-8 h-[1px] bg-foreground" />
-            <div className="w-[1px] h-2 bg-foreground" />
-            <span className="text-[8px] font-mono tracking-widest mt-0.5 text-foreground">SYS.0{index + 1}</span>
           </div>
         </div>
       </div>

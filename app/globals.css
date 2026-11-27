@@ -79,7 +79,8 @@
    "white"/"black" utilities follow the theme so every card and border flips.
    ===================================================================== */
 .site,
-html[data-theme] .site .force-dark {
+html[data-theme] .site .force-dark,
+html[data-theme] .site:has(#gallery) > footer {
   --background: #02091a;
   --foreground: #ededed;
   --color-white: #ffffff;
@@ -188,7 +189,8 @@ html[data-theme="light"] .site .shadow-black\/50 {
   --tw-shadow-color: rgba(15, 23, 42, 0.08);
 }
 /* Keep a block in the dark palette in both themes (video frames, overlays) */
-.site .force-dark {
+.site .force-dark,
+.site:has(#gallery) > footer {
   color-scheme: dark;
 }
 
@@ -547,4 +549,9 @@ button,
 /* Hero editor: code not yet "typed" is already in the HTML, drawn faint, so it paints on first load */
 .code-ghost {
   opacity: 0.22;
+}
+
+/* Art side: footer joins the black theatre */
+html[data-theme] .site:has(#gallery) > footer {
+  background: #000;
 }

@@ -34,7 +34,7 @@ export function Contact({ c }: { c: SiteContent }) {
                     <SocialGlyph icon="email" className="h-[18px] w-[18px]" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-mono uppercase tracking-widest text-foreground/50">Email</span>
+                    <span className="block text-[11px] font-mono uppercase tracking-wider text-foreground/50">Email</span>
                     <span className="block break-all text-sm font-medium text-foreground/90 group-hover:text-foreground">{email}</span>
                   </span>
                 </a>
@@ -54,7 +54,7 @@ export function Contact({ c }: { c: SiteContent }) {
                     <SocialGlyph icon={s.icon} className="h-[18px] w-[18px]" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-mono uppercase tracking-widest text-foreground/50">{s.label}</span>
+                    <span className="block text-[11px] font-mono uppercase tracking-wider text-foreground/50">{s.label}</span>
                     <span className="block truncate text-sm font-medium text-foreground/90 group-hover:text-foreground">
                       {s.url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
                     </span>
@@ -73,7 +73,7 @@ export function Contact({ c }: { c: SiteContent }) {
                   <Download className="h-[18px] w-[18px]" />
                 </span>
                 <span>
-                  <span className="block text-[10px] font-mono uppercase tracking-widest text-foreground/50">Resume</span>
+                  <span className="block text-[11px] font-mono uppercase tracking-wider text-foreground/50">Resume</span>
                   <span className="block text-sm font-medium text-foreground/90">Download PDF</span>
                 </span>
               </span>

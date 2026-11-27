@@ -110,7 +110,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
         {!images.length && (
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-blue-500/10 flex flex-col items-center justify-center gap-3 px-6 text-center">
             <Layers className="text-foreground/10 w-12 h-12 sm:w-16 sm:h-16" />
-            {!isExpanded && <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/30">{project.context}</span>}
+            {!isExpanded && <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/30">{project.context}</span>}
           </div>
         )}
 
@@ -158,7 +158,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
               <span aria-hidden className="absolute inset-0 animate-ping rounded-full border border-white/20 [animation-duration:2.4s]" />
               <Play className="h-5 w-5 translate-x-0.5 fill-current sm:h-6 sm:w-6" />
             </span>
-            <span className="force-dark absolute bottom-3 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md">
+            <span className="force-dark absolute bottom-3 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Product demo
             </span>
           </button>
@@ -212,7 +212,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
         {isExpanded && (
           <div className="absolute bottom-6 sm:bottom-8 left-6 right-6 sm:right-8 z-10">
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.1 } }} className="space-y-1.5 sm:space-y-2">
-              <span className="text-foreground/80 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] bg-foreground/5 px-2.5 py-1 rounded-full border border-foreground/10 backdrop-blur-md inline-block mb-1 sm:mb-0">
+              <span className="text-foreground/80 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] bg-foreground/5 px-2.5 py-1 rounded-full border border-foreground/10 backdrop-blur-md inline-block mb-1 sm:mb-0">
                 Project Deep Dive
               </span>
               <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground title-font drop-shadow-2xl tracking-tight leading-none">{project.title}</h3>
@@ -228,7 +228,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
             <h3 className="text-lg sm:text-xl font-bold title-font text-foreground/90 group-hover:text-foreground transition-colors mb-1.5 sm:mb-2 tracking-tight">{project.title}</h3>
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {project.technologies.slice(0, 3).map((tech, i) => (
-                <span key={i} className="text-[9px] sm:text-[10px] uppercase tracking-wider font-bold text-purple-300/80 group-hover:text-purple-300 transition-colors">
+                <span key={i} className="text-[11px] sm:text-xs uppercase tracking-wider font-bold text-purple-300/80 group-hover:text-purple-300 transition-colors">
                   {tech}
                   {i < Math.min(3, project.technologies.length) - 1 ? " •" : ""}
                 </span>
@@ -251,7 +251,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
                   {project.problem && <p className="text-sm sm:text-base leading-relaxed text-foreground/70 font-light">{project.problem}</p>}
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className="h-px w-6 sm:w-8 bg-purple-500/50"></div>
-                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-purple-300 shrink-0">Core Initiatives</span>
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-purple-300 shrink-0">Core Initiatives</span>
                     <div className="h-px flex-1 bg-gradient-to-r from-purple-500/20 to-transparent"></div>
                   </div>
                   <div className="space-y-4 sm:space-y-5">
@@ -266,7 +266,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
                     <>
                       <div className="flex items-center gap-3 sm:gap-4 pt-2">
                         <div className="h-px w-6 sm:w-8 bg-emerald-500/50"></div>
-                        <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 shrink-0">Impact</span>
+                        <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-emerald-500 shrink-0">Impact</span>
                         <div className="h-px flex-1 bg-gradient-to-r from-emerald-500/20 to-transparent"></div>
                       </div>
                       <div className="space-y-4 sm:space-y-5">
@@ -284,10 +284,10 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
                 <div className="lg:col-span-2 space-y-6">
                   <div className="p-5 sm:p-6 rounded-2xl bg-foreground/[0.02] border border-foreground/5 space-y-6">
                     <div>
-                      <h4 className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-foreground/50 mb-4">Technical Snapshot</h4>
+                      <h4 className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-foreground/50 mb-4">Technical Snapshot</h4>
                       <div className="flex flex-wrap gap-2">
                         {project.technologies.map((tech, i) => (
-                          <span key={i} className="text-[9px] sm:text-[10px] font-bold text-foreground/80 bg-foreground/5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-foreground/10 hover:bg-foreground/10 transition-colors cursor-default">
+                          <span key={i} className="text-[11px] sm:text-xs font-bold text-foreground/80 bg-foreground/5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-foreground/10 hover:bg-foreground/10 transition-colors cursor-default">
                             {tech}
                           </span>
                         ))}
@@ -307,7 +307,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
                             <SocialGlyph icon="github" className="w-5 h-5 sm:w-6 sm:h-6 text-foreground/70 group-hover/btn:text-foreground transition-colors" />
                             <span className="text-xs sm:text-sm font-semibold text-foreground/70 group-hover/btn:text-foreground transition-colors">Source Code</span>
                           </div>
-                          <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-foreground/50 group-hover/btn:text-foreground/80 transition-colors">GitHub</div>
+                          <div className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-foreground/50 group-hover/btn:text-foreground/80 transition-colors">GitHub</div>
                         </a>
                       )}
 
@@ -323,7 +323,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
                             <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-400/70 group-hover/btn:text-indigo-400 transition-colors" />
                             <span className="text-xs sm:text-sm font-semibold text-indigo-300/70 group-hover/btn:text-indigo-300 transition-colors">Visit website</span>
                           </div>
-                          <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-indigo-500/50 group-hover/btn:text-indigo-400/50 transition-colors">Live</div>
+                          <div className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-indigo-500/50 group-hover/btn:text-indigo-400/50 transition-colors">Live</div>
                         </a>
                       )}
 
@@ -347,7 +347,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
                 }}
                 className="mt-6 sm:mt-8 pt-4 min-h-11 border-t border-foreground/5 flex items-center justify-between cursor-pointer group/close"
               >
-                <span className="text-[9px] sm:text-[10px] font-bold text-foreground/50 uppercase tracking-widest group-hover/close:text-foreground transition-colors">Collapse Project</span>
+                <span className="text-[11px] sm:text-xs font-bold text-foreground/50 uppercase tracking-widest group-hover/close:text-foreground transition-colors">Collapse Project</span>
                 <div className="p-2 rounded-full bg-foreground/5 group-hover/close:bg-foreground/10 transition-colors">
                   <ChevronUp className="text-foreground/60 group-hover/close:text-foreground group-hover/close:-translate-y-0.5 transition-all w-3 h-3 sm:w-4 sm:h-4" />
                 </div>
@@ -363,7 +363,7 @@ function ProjectCard({ project, isExpanded, onToggle }: { project: ProjectCardDa
             >
               <p className="line-clamp-3 text-xs sm:text-sm text-foreground/60 font-light leading-relaxed">{[project.tagline, project.problem].filter(Boolean).join(" ")}</p>
               <div className="pt-4 border-t border-foreground/5 flex items-center justify-between pointer-events-none mt-auto">
-                <span className="text-[8px] sm:text-[9px] font-bold text-foreground/50 uppercase tracking-[0.2em] group-hover:text-foreground transition-colors">Explore Project</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-foreground/50 uppercase tracking-[0.2em] group-hover:text-foreground transition-colors">Explore Project</span>
                 <ChevronDown className="text-foreground/40 group-hover:text-foreground group-hover:translate-y-0.5 transition-all w-3 h-3 sm:w-4 sm:h-4" />
               </div>
             </motion.div>
@@ -394,7 +394,7 @@ export default function Projects({ projects }: { projects: ProjectCardData[] }) 
   return (
     <section id="projects" aria-labelledby="projects-title" className="pb-16 sm:pb-24 lg:pb-32 border-b border-foreground/10 scroll-mt-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="flex flex-col xl:flex-row xl:items-end justify-between mb-10 sm:mb-12 md:mb-16 gap-6 sm:gap-8 md:gap-12 mt-12 sm:mt-16 lg:mt-24">
+        <div className="flex flex-col xl:flex-row xl:items-end justify-between mb-10 sm:mb-12 md:mb-16 gap-6 sm:gap-8 md:gap-12 mt-6 sm:mt-12 lg:mt-20">
           <div className="max-w-2xl">
             <h2 id="projects-title" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-foreground">
               My <br className="hidden sm:block" /> <span className="text-foreground/50">Projects.</span>
