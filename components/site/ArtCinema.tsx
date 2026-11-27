@@ -97,43 +97,30 @@ export function HeroReel({
       <div aria-hidden className="film-grain pointer-events-none absolute inset-0 -z-10" />
 
       {/* Letterbox bars */}
-      <motion.div aria-hidden initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 1.4, ease: EASE, delay: 0.2 }} className="absolute inset-x-0 top-0 h-[6svh] origin-top bg-black md:h-[9svh]" />
-      <motion.div aria-hidden initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ duration: 1.4, ease: EASE, delay: 0.2 }} className="absolute inset-x-0 bottom-0 h-[6svh] origin-bottom bg-black md:h-[9svh]" />
+      {/* CSS animations: they start at first paint, before any JavaScript */}
+      <div aria-hidden className="letterbox absolute inset-x-0 top-0 h-[6svh] origin-top bg-black md:h-[9svh]" />
+      <div aria-hidden className="letterbox absolute inset-x-0 bottom-0 h-[6svh] origin-bottom bg-black md:h-[9svh]" />
 
       <div className="relative mx-auto w-full max-w-7xl px-5 pb-[calc(6svh+2.5rem)] sm:px-8 md:pb-[calc(9svh+3rem)]">
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: EASE, delay: 0.7 }}
-          className="flex items-center gap-3 text-white/60"
-        >
+        <p className="cine-in flex items-center gap-3 text-white/60" style={{ animationDelay: "0.1s" }}>
           <Clapperboard className="h-4 w-4" aria-hidden />
           <span className="font-mono text-[10px] font-bold uppercase tracking-[0.4em]">{kicker}</span>
-        </motion.p>
-        <motion.h1
+        </p>
+        <h1
           id="art-title"
-          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1.4, ease: EASE, delay: 0.85 }}
-          className="mt-4 max-w-4xl font-serif text-[clamp(2.9rem,11vw,7.5rem)] leading-[0.9] tracking-tighter"
+          style={{ animationDelay: "0.15s" }}
+          className="cine-in mt-4 max-w-4xl font-serif text-[clamp(2.9rem,11vw,7.5rem)] leading-[0.9] tracking-tighter"
         >
           {heading} <br />
           <span className="film-accent bg-gradient-to-r from-amber-100 via-white to-amber-400 bg-clip-text text-transparent">{accent}</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.4, delay: 1.2 }}
-          className="mt-5 max-w-lg font-serif text-base italic leading-relaxed text-white/70 md:text-lg"
+        </h1>
+        <p
+          style={{ animationDelay: "0.35s" }}
+          className="cine-in mt-5 max-w-lg font-serif text-base italic leading-relaxed text-white/70 md:text-lg"
         >
           {intro}
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: EASE, delay: 1.45 }}
-          className="mt-8 flex flex-wrap items-center gap-3"
-        >
+        </p>
+        <div style={{ animationDelay: "0.5s" }} className="cine-in mt-8 flex flex-wrap items-center gap-3">
           {canPlay ? (
             <button
               type="button"
@@ -149,7 +136,7 @@ export function HeroReel({
           >
             Browse the work <ChevronDown className="h-4 w-4" aria-hidden />
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

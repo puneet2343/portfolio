@@ -524,3 +524,22 @@ button,
     transform: translateY(-1px) scale(1.02);
   }
 }
+
+/* Art hero: title card and letterbox bars animate from first paint (no JS needed) */
+.cine-in {
+  animation: cine-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes cine-in {
+  from {
+    opacity: 0.01;
+    transform: translateY(24px);
+  }
+}
+.letterbox {
+  animation: letterbox 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+@keyframes letterbox {
+  from {
+    transform: scaleY(0);
+  }
+}

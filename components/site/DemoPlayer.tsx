@@ -113,6 +113,11 @@ export function DemoPlayer({ demo, title, autoStart = false, className = "" }: {
         }
       }}
     >
+      {/* Poster as a real image so it paints early (it is the largest thing on the case study). */}
+      {demo.poster && !started ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={demo.poster} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-contain" />
+      ) : null}
       {/* Motion-graphic demo: on-screen text and music, no speech to caption. */}
       <video
         ref={video}
