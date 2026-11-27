@@ -9,8 +9,10 @@ const display = Fraunces({
   variable: "--font-display",
   axes: ["opsz", "SOFT"],
   display: "swap",
+  // Admin headings only: don't make public pages download it up front.
+  preload: false,
 });
-const body = Instrument_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const body = Instrument_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap", preload: false });
 // Fallback for the Apple system font stack on Windows and Android.
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
@@ -66,6 +68,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Media (posters, art thumbnails) comes from Vercel Blob: open that connection early. */}
+        <link rel="preconnect" href="https://o84jhj08pqkv4hu6.public.blob.vercel-storage.com" crossOrigin="" />
       </head>
       <body>{children}</body>
     </html>

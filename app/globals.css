@@ -543,3 +543,8 @@ button,
     transform: scaleY(0);
   }
 }
+
+/* Hero editor: code not yet "typed" is already in the HTML, drawn faint, so it paints on first load */
+.code-ghost {
+  opacity: 0.22;
+}

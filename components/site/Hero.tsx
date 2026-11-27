@@ -85,8 +85,13 @@ Tooltip.displayName = "Tooltip";
 const TS_KEYWORDS = ["import", "from", "const", "export", "default", "return", "true", "false"];
 const TS_TYPES = ["Developer", "String", "Array", "puneet"];
 
-const CodeRenderer = memo(({ code, lang }: { code: string; lang: string }) => {
+/**
+ * `revealed` = how many characters have been "typed". The rest is already in the HTML, drawn as
+ * faint ghost text, so the editor paints complete on first load and the typing brightens it.
+ */
+const CodeRenderer = memo(({ code, lang, revealed = Infinity }: { code: string; lang: string; revealed?: number }) => {
   const lines = useMemo(() => code.split("\n"), [code]);
+  let offset = 0;
 
   return (
     <div className="font-mono text-[11px] sm:text-[13px] md:text-[14px] leading-relaxed whitespace-pre font-medium min-w-max will-change-contents pb-8">
@@ -97,6 +102,8 @@ const CodeRenderer = memo(({ code, lang }: { code: string; lang: string }) => {
           </span>
           <span className="table-cell pr-4">
             {line.split(/(\s+|[{}()[\],:;'"=])/g).map((token, j) => {
+              const start = offset;
+              offset += token.length;
               let color = "var(--vs-fg)";
               if (lang === "ts") {
                 if (TS_KEYWORDS.includes(token)) color = "var(--vs-kw)";
@@ -117,12 +124,22 @@ const CodeRenderer = memo(({ code, lang }: { code: string; lang: string }) => {
                 if (token.startsWith("#")) color = "var(--vs-kw)";
                 else if (token.startsWith("**")) color = "var(--vs-str)";
               }
+              if (start + token.length <= revealed) {
+                return (
+                  <span key={j} style={{ color }}>
+                    {token}
+                  </span>
+                );
+              }
+              const cut = Math.max(0, revealed - start);
               return (
                 <span key={j} style={{ color }}>
-                  {token}
+                  {cut > 0 ? token.slice(0, cut) : null}
+                  <span className="code-ghost">{token.slice(cut)}</span>
                 </span>
               );
             })}
+            {void (offset += 1) /* the newline */}
           </span>
         </div>
       ))}
@@ -164,11 +181,11 @@ const ActiveCodeWindow = memo(
       }
     }, [activeTab, isTyping, isRunning, onTypingComplete, files]);
 
-    const displayCode = activeTab === "developer.ts" && isTyping ? typedCode : files[activeTab];
+    const typing = activeTab === "developer.ts" && isTyping;
 
     return (
       <div className="min-h-full h-full overflow-x-auto overflow-y-auto w-full no-scrollbar pb-10">
-        <CodeRenderer code={displayCode} lang={activeTab.split(".")[1]} />
+        <CodeRenderer code={files[activeTab]} lang={activeTab.split(".")[1]} revealed={typing ? typedCode.length : Infinity} />
       </div>
     );
   },
@@ -288,7 +305,7 @@ export default function Hero(props: HeroProps) {
     switch (activeView) {
       case "EXPLORER":
         return (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+          <motion.div initial={hydrated ? { opacity: 0 } : false} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
             <div className="px-3 sm:px-5 py-3 text-[10px] sm:text-[11px] tracking-wide text-foreground/70 flex justify-between items-center bg-transparent select-none cursor-pointer">
               EXPLORER <MoreHorizontal size={14} className="cursor-pointer" />
             </div>
@@ -314,7 +331,7 @@ export default function Hero(props: HeroProps) {
         );
       case "SEARCH":
         return (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+          <motion.div initial={hydrated ? { opacity: 0 } : false} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
             <div className="px-3 sm:px-5 py-3 text-[10px] sm:text-[11px] tracking-wide text-foreground/70">SEARCH</div>
             <div className="px-3 sm:px-4 mb-4">
               <div className="bg-white/5 flex items-center px-2 py-1.5 rounded-sm border border-transparent focus-within:border-[#007acc] ring-1 ring-transparent focus-within:ring-[#007acc]">
