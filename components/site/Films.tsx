@@ -226,7 +226,7 @@ export function FilmBlock({ film, index, directedBy }: { film: BeyondItem; index
       type="button"
       onClick={toggleSound}
       aria-label={isMuted ? `Unmute ${film.title} ${film.titleAccent}` : `Mute ${film.title} ${film.titleAccent}`}
-      className="h-11 w-11 sm:h-9 sm:w-9 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/30 transition-all duration-300"
+      className="relative h-11 w-11 sm:h-9 sm:w-9 flex items-center justify-center rounded-full sm:after:absolute sm:after:-inset-1 sm:after:content-[''] bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/30 transition-all duration-300"
     >
       {isMuted ? <VolumeX className="w-4 h-4 text-white/70" /> : <Volume2 className={`w-4 h-4 text-white ${t.hover}`} />}
     </button>
@@ -325,7 +325,7 @@ export function FilmBlock({ film, index, directedBy }: { film: BeyondItem; index
               type="button"
               onClick={fullscreen}
               aria-label={`Watch ${film.title} ${film.titleAccent} full screen`}
-              className={`absolute top-3 sm:top-4 ${t.audioLeft ? "right-3 sm:right-4" : "left-3 sm:left-4"} z-40 h-11 w-11 sm:h-9 sm:w-9 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/30 transition-all duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100`}
+              className={`absolute top-3 sm:top-4 ${t.audioLeft ? "right-3 sm:right-4" : "left-3 sm:left-4"} z-40 h-11 w-11 sm:h-9 sm:w-9 flex items-center justify-center rounded-full sm:after:absolute sm:after:-inset-1 sm:after:content-[''] bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/30 transition-all duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100`}
             >
               <Maximize2 className="w-4 h-4 text-white" />
             </button>
