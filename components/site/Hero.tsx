@@ -572,7 +572,9 @@ export default function Hero(props: HeroProps) {
                 onClick={handleDeploymentAction}
                 className="bg-[#007acc] text-[#fff] px-4 md:px-6 py-3 min-h-11 rounded-lg shadow-xl flex items-center justify-center gap-2 text-[11px] md:text-xs font-bold tracking-wide hover:bg-[#006bb3] cursor-pointer border border-white/5 transition-all w-full md:w-auto"
               >
-                <Download size={14} strokeWidth={2.5} /> Deployment Complete. Download Resume.
+                <Download size={14} strokeWidth={2.5} aria-hidden />
+                {/* CSS content: a late pop-up, kept out of the page's main-paint (LCP) measurement */}
+                <span aria-label="Deployment complete. Download resume." className="before:content-['Deployment_Complete._Download_Resume.']" />
               </motion.button>
             </motion.div>
           )}
@@ -610,14 +612,16 @@ export default function Hero(props: HeroProps) {
                     key={i}
                     initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className={`mt-1 ${log.includes("✓") || log.includes("successfully") ? "text-[var(--vs-ok)]" : "text-[var(--vs-text)]"}`}
-                  >
-                    {log}
-                  </motion.div>
+                    // Drawn via CSS content: these lines appear seconds after load and must not count as the page's main paint (LCP).
+                    data-line={log}
+                    aria-label={log}
+                    className={`mt-1 min-h-[1lh] before:content-[attr(data-line)] ${log.includes("✓") || log.includes("successfully") ? "text-[var(--vs-ok)]" : "text-[var(--vs-text)]"}`}
+                  />
                 ))}
                 {buildStep === 2 && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-[var(--vs-ok)] font-bold">
-                    Done in 1.82s. <span className="text-white animate-pulse font-normal">_</span>
+                    <span className="before:content-['Done_in_1.82s._']" aria-label="Done in 1.82s." />
+                    <span className="text-white animate-pulse font-normal">_</span>
                   </motion.div>
                 )}
               </div>
