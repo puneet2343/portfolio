@@ -352,9 +352,8 @@ export const EDITORS: Record<string, EditorDef> = {
         label: "Default mode for new visitors",
         type: "select",
         options: [
-          { value: "system", label: "Follow the visitor's device" },
-          { value: "dark", label: "Dark (the original look)" },
           { value: "light", label: "Light" },
+          { value: "dark", label: "Dark (the original look)" },
         ],
       },
     ],

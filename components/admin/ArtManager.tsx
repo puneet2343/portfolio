@@ -80,6 +80,17 @@ export function ArtManager() {
           ...(editing?.category && !categories.some((c) => c.id === editing.category) ? [{ value: editing.category, label: `${editing.category} (no tab)` }] : []),
         ],
       },
+      {
+        k: "kind",
+        label: "Kind",
+        type: "select",
+        half: true,
+        options: [
+          { value: "film", label: "Film" },
+          { value: "reel", label: "Reel / video" },
+          { value: "photo", label: "Photo" },
+        ],
+      },
       { k: "date", label: "Posted on", type: "date", half: true },
       { k: "order", label: "Order", type: "number", half: true, help: "Lower shows first. 0 = sort by date." },
       { k: "thumb", label: "Thumbnail (optional)", type: "image", help: "Defaults to the first file's poster or image." },

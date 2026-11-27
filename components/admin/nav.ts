@@ -25,7 +25,6 @@ export const ADMIN_NAV: { group: string; items: { href: string; label: string }[
     group: "Art side",
     items: [
       { href: "/admin/art", label: "Art gallery" },
-      { href: "/admin/edit/beyond", label: "Films" },
       { href: "/admin/edit/art", label: "Art page & categories" },
     ],
   },

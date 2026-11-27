@@ -1,14 +1,16 @@
 import { Footer } from "@/components/site/Contact";
 import { Header } from "@/components/site/Header";
+import { MotionProvider } from "@/components/site/MotionProvider";
 import SmoothScroll from "@/components/site/SmoothScroll";
 import { Tracker } from "@/components/site/Tracker";
-import { getPublicContent } from "@/lib/content";
+import { getPublicArt, getPublicContent } from "@/lib/content";
 import { artNavItems, navItems } from "@/lib/site-data";
 
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
-  const c = await getPublicContent();
+  const [c, art] = await Promise.all([getPublicContent(), getPublicArt()]);
 
   return (
+    <MotionProvider>
     <div id="top" className="site">
       <a
         href="#main"
@@ -17,10 +19,11 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
         Skip to content
       </a>
       <SmoothScroll />
-      <Header name={c.profile.name} nav={navItems(c)} artNav={artNavItems(c)} resumeUrl={c.profile.resumeUrl} />
+      <Header name={c.profile.name} nav={navItems(c)} artNav={artNavItems(c, art)} resumeUrl={c.profile.resumeUrl} />
       <main id="main">{children}</main>
       <Footer c={c} />
       <Tracker />
     </div>
+    </MotionProvider>
   );
 }

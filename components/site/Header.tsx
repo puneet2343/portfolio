@@ -122,10 +122,11 @@ export function Header({ name, nav: proNav, artNav, resumeUrl }: { name: string;
         style={{ paddingTop: "max(12px, env(safe-area-inset-top))" }}
       >
         <motion.header
+          style={{ viewTransitionName: "site-header" }}
           initial={{ y: -24, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 26, delay: 0.1 }}
-          className={`pointer-events-auto relative flex w-full items-center justify-between gap-1 overflow-hidden rounded-full border border-white/10 bg-background/55 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.55)] backdrop-blur-xl backdrop-saturate-150 transition-[max-width,padding,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`pointer-events-auto relative flex w-full items-center justify-between gap-1 rounded-full border border-white/10 bg-background/55 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.55)] backdrop-blur-xl backdrop-saturate-150 transition-[max-width,padding,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             scrolled ? "max-w-[880px] bg-background/75 py-1 pl-1.5 pr-1.5" : "max-w-[1100px] py-1.5 pl-2 pr-2"
           }`}
         >
@@ -141,7 +142,7 @@ export function Header({ name, nav: proNav, artNav, resumeUrl }: { name: string;
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#007acc] text-[11px] font-bold text-[#fff] shadow-[0_0_0_3px_rgba(0,122,204,0.18)] transition-transform duration-300 group-hover:scale-105">
               {initials}
             </span>
-            <span className="hidden whitespace-nowrap text-sm font-semibold tracking-tight text-foreground min-[340px]:block md:hidden xl:block">
+            <span className="hidden whitespace-nowrap text-sm font-semibold tracking-tight text-foreground min-[480px]:block md:hidden xl:block">
               {name}
             </span>
           </Link>
@@ -157,7 +158,7 @@ export function Header({ name, nav: proNav, artNav, resumeUrl }: { name: string;
                         href={hrefOf(n.id)}
                         onClick={(e) => go(e, n.id)}
                         aria-current={isActive ? "true" : undefined}
-                        className={`relative flex h-11 items-center rounded-full px-3.5 text-[13px] font-medium transition-colors lg:px-4 ${
+                        className={`relative flex h-11 items-center rounded-full px-3 text-[13px] font-medium transition-colors lg:px-4 ${
                           isActive ? "text-background" : "text-foreground/65 hover:text-foreground"
                         }`}
                       >
@@ -178,17 +179,16 @@ export function Header({ name, nav: proNav, artNav, resumeUrl }: { name: string;
           </nav>
 
           <div className="flex shrink-0 items-center gap-1">
-            <span className="hidden md:inline-flex">
-              <ModeSwitch layoutId="mode-thumb-desktop" />
-            </span>
+            <ModeSwitch />
             <ThemeToggle />
             <Magnetic strength={0.25}>
               <a
                 href={resumeUrl}
                 download
-                className="hidden h-11 items-center gap-2 rounded-full bg-foreground px-4 text-[13px] font-semibold text-background transition-transform hover:scale-[1.03] active:scale-95 sm:inline-flex"
+                aria-label="Download resume"
+                className="hidden h-11 items-center gap-2 rounded-full bg-foreground px-3.5 text-[13px] font-semibold text-background transition-transform hover:scale-[1.03] active:scale-95 sm:inline-flex lg:px-4"
               >
-                <Download size={14} strokeWidth={2.5} aria-hidden /> Resume
+                <Download size={14} strokeWidth={2.5} aria-hidden /> <span className="md:max-lg:hidden">Resume</span>
               </a>
             </Magnetic>
             <button
@@ -244,15 +244,6 @@ export function Header({ name, nav: proNav, artNav, resumeUrl }: { name: string;
                 <X size={20} aria-hidden />
               </button>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0, transition: { delay: 0.05 } }}
-              exit={{ opacity: 0 }}
-              className="relative px-5 pt-5"
-            >
-              <ModeSwitch layoutId="mode-thumb-mobile" size="lg" onSwitch={() => setOpen(false)} />
-            </motion.div>
 
             <nav aria-label="Sections" className="relative flex flex-1 flex-col justify-center px-6 py-8">
               <motion.ul

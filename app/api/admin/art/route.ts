@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     const store = await getStore();
     const item = sanitizeArtItem({ ...(body.item as object), id: "" });
     await store.saveArt(item);
-    revalidatePath("/art");
+    revalidatePath("/", "layout"); // header rows + /art
     return Response.json({ item });
   } catch (err) {
     return fail(err);

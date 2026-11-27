@@ -32,31 +32,13 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     setMode(current());
     const onChange = (e: Event) => setMode((e as CustomEvent<Mode>).detail);
     window.addEventListener(EVENT, onChange);
-    // Follow the system setting until the visitor picks a theme themselves.
-    const mq = window.matchMedia("(prefers-color-scheme: light)");
-    const onSystem = () => {
-      let saved: string | null = null;
-      try {
-        saved = localStorage.getItem("theme");
-      } catch {
-        /* ignore */
-      }
-      if (saved !== "dark" && saved !== "light" && document.documentElement.dataset.themeDefault === "system") {
-        apply(mq.matches ? "light" : "dark", false);
-      }
-    };
-    mq.addEventListener("change", onSystem);
-    return () => {
-      window.removeEventListener(EVENT, onChange);
-      mq.removeEventListener("change", onSystem);
-    };
+    return () => window.removeEventListener(EVENT, onChange);
   }, []);
 
   function toggle(e: React.MouseEvent<HTMLButtonElement>) {
     const next: Mode = current() === "dark" ? "light" : "dark";
     const doc = document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!doc.startViewTransition || reduce) {
+    if (!doc.startViewTransition) {
       apply(next, true);
       return;
     }

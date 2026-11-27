@@ -186,6 +186,9 @@ export default function Hero(props: HeroProps) {
   const [activeView, setActiveView] = useState<ViewName>("EXPLORER");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  // Until hydration knows the screen size, keep the explorer out of the phone layout (no layout shift).
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
   const [isRunning, setIsRunning] = useState(false);
@@ -399,7 +402,7 @@ export default function Hero(props: HeroProps) {
           x: isSidebarOpen ? 0 : isMobile ? "-100%" : 0,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={`flex flex-col bg-background border-r border-white/10 overflow-hidden whitespace-nowrap z-50 h-full shrink-0 ${
+        className={`flex flex-col bg-background border-r border-white/10 overflow-hidden whitespace-nowrap z-50 h-full shrink-0 ${hydrated ? "" : "max-md:hidden"} ${
           isMobile ? "absolute top-0 left-0 shadow-2xl max-w-[300px] pt-[68px] sm:pt-[76px]" : "relative"
         }`}
       >

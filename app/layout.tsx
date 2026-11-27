@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Instrument_Sans } from "next/font/google";
+import { Fraunces, Instrument_Sans, Inter } from "next/font/google";
 import type { CSSProperties } from "react";
 import { getContent, siteUrl } from "@/lib/content";
 import "./globals.css";
@@ -11,6 +11,8 @@ const display = Fraunces({
   display: "swap",
 });
 const body = Instrument_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+// Fallback for the Apple system font stack on Windows and Android.
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const c = await getContent();
@@ -38,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f8fc" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f7" },
     { media: "(prefers-color-scheme: dark)", color: "#02091a" },
   ],
   width: "device-width",
@@ -47,18 +49,19 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const c = await getContent();
-  const mode = c.theme.defaultMode;
+  // Light is the default for every new visitor; their own choice (toggle) is remembered.
+  const mode = c.theme.defaultMode === "dark" ? "dark" : "light";
   const style = { "--brand": c.theme.accent, "--brand-2": c.theme.accent2 } as CSSProperties;
   // Runs before first paint: apply the visitor's saved theme (or the site default) without a flash.
-  const themeScript = `(function(){var d=document.documentElement,m="${mode}";try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")m=t}catch(e){}if(m!=="dark"&&m!=="light")m=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";d.setAttribute("data-theme",m)})()`;
+  const themeScript = `(function(){var d=document.documentElement,m="${mode}";try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")m=t}catch(e){}d.setAttribute("data-theme",m)})()`;
 
   return (
     <html
       lang="en"
-      data-theme={mode === "light" ? "light" : "dark"}
+      data-theme={mode}
       data-theme-default={mode}
       style={style}
-      className={`${display.variable} ${body.variable}`}
+      className={`${display.variable} ${body.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
       <head>

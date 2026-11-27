@@ -170,7 +170,7 @@ export function sanitizeContentPart<K extends ContentKey>(key: K, value: unknown
 }
 
 const ART_ITEM: Shape = {
-  id: "s", title: "s", caption: "t", category: "s", thumb: "u", date: "s", featured: "b", published: "b",
+  id: "s", title: "s", caption: "t", category: "s", kind: "s", thumb: "u", date: "s", featured: "b", published: "b",
   source: "s", account: "s", hashes: SA,
   media: [{ type: "s", src: "u", poster: "u", preview: "u" }],
 };
@@ -201,7 +201,8 @@ export function sanitizeArtItem(value: unknown, prev?: ArtItem): ArtItem {
     ...v,
     id: prev?.id || v.id || Math.random().toString(36).slice(2, 12),
     title: v.title,
-    category: slugify(v.category || "reels"),
+    category: slugify(v.category || "films-reels"),
+    kind: v.kind === "film" || v.kind === "photo" ? v.kind : media[0]?.type === "image" ? "photo" : "reel",
     media,
     date,
     order: Number.isFinite(order) ? Math.max(-9999, Math.min(9999, Math.round(order))) : 0,

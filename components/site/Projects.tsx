@@ -5,7 +5,11 @@ import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Layers, Globe, Arrow
 import Link from "next/link";
 import { useState, type MouseEvent } from "react";
 import { SocialGlyph } from "./bits";
-import { DemoModal, type Demo } from "./DemoPlayer";
+import dynamic from "next/dynamic";
+import type { Demo } from "./DemoPlayer";
+
+// Loaded only when someone presses play.
+const DemoModal = dynamic(() => import("./DemoPlayer").then((m) => m.DemoModal), { ssr: false });
 
 export interface ProjectCardData {
   slug: string;

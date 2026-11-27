@@ -27,7 +27,7 @@ export async function PATCH(req: NextRequest, ctx: RouteContext<"/api/admin/art/
     if (!prev) return Response.json({ error: "Not found." }, { status: 404 });
     const item = sanitizeArtItem({ ...prev, ...(body.item as object), id }, prev);
     await store.saveArt(item);
-    revalidatePath("/art");
+    revalidatePath("/", "layout"); // header rows + /art
     return Response.json({ item });
   } catch (err) {
     return fail(err);
@@ -40,7 +40,7 @@ export async function DELETE(req: NextRequest, ctx: RouteContext<"/api/admin/art
   const { id } = await ctx.params;
   try {
     const ok = await (await getStore()).deleteArt(id);
-    revalidatePath("/art");
+    revalidatePath("/", "layout"); // header rows + /art
     return ok ? Response.json({ ok: true }) : Response.json({ error: "Not found." }, { status: 404 });
   } catch (err) {
     return fail(err);

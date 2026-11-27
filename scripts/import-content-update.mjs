@@ -197,7 +197,7 @@ const SHOWCASE = [
       title: "SMRSC 2026 website",
       tagline: "Website for SMRSC 2026, SS Innovations' international conference on robotic surgery.",
       liveUrl: "https://smrsc.vercel.app/home",
-      cover: "/images/projects/smrsc.png",
+      cover: "/images/projects/smrsc.webp",
       gallery: [],
       impact: ["Schedules, faculty and media are managed as content instead of being hard-coded."],
     },
@@ -209,7 +209,7 @@ const SHOWCASE = [
       title: "SSI CRS website",
       tagline: "Website for the SSI CRS training program, where surgeons learn the SSi Mantra robotic system.",
       liveUrl: "https://ssicrsweb.vercel.app/Home",
-      cover: "/images/projects/ssicrs.png",
+      cover: "/images/projects/ssicrs.webp",
       gallery: [],
       built: [
         "Pages that explain the training program and its hands-on courses on the SSi Mantra system.",

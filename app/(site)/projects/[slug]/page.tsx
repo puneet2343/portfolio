@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight, Globe, Layers } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { notFound } from "next/navigation";
 import { Photo, SocialGlyph } from "@/components/site/bits";
 import { DemoPlayer } from "@/components/site/DemoPlayer";
@@ -47,6 +48,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
   const next = c.projects[(idx + 1) % c.projects.length];
 
   return (
+    <ViewTransition enter="page" exit="page" default="none">
     <article className="relative bg-background text-foreground font-sans pt-28 pb-16 sm:pt-36">
       <div aria-hidden className="pointer-events-none absolute -top-20 left-1/2 h-[420px] w-[620px] max-w-full -translate-x-1/2 rounded-full bg-[#007acc]/10 blur-[140px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -246,5 +248,6 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
         ) : null}
       </div>
     </article>
+    </ViewTransition>
   );
 }

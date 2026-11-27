@@ -1,6 +1,6 @@
 import type { TimelineData } from "@/components/site/Journey";
 import type { ProjectCardData } from "@/components/site/Projects";
-import type { SectionId, SiteContent } from "./types";
+import type { ArtItem, SectionId, SiteContent } from "./types";
 
 /** DOM ids of the home-page sections (used by the header and anchors). */
 export const SECTION_DOM_ID: Partial<Record<SectionId, string>> = {
@@ -25,8 +25,11 @@ export function navItems(c: SiteContent) {
 }
 
 /** Header links on the Art side (/art). */
-export function artNavItems(c: SiteContent) {
-  return [{ id: "gallery", label: c.art.galleryHeading || "Gallery" }, ...(c.beyond.items.length ? [{ id: "films", label: "Films" }] : [])];
+/** Header links on the Art side (/art): one per category row that has published work. */
+export function artNavItems(c: SiteContent, art: ArtItem[]) {
+  const rows = c.art.categories.filter((cat) => art.some((x) => x.category === cat.id));
+  if (!rows.length) return [{ id: "gallery", label: c.art.galleryHeading || "Gallery" }];
+  return rows.map((cat) => ({ id: `row-${cat.id}`, label: cat.label.split(/\s/)[0] }));
 }
 
 const period = (a: string, b: string) => [a, b].filter(Boolean).join(" - ");

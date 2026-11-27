@@ -108,13 +108,13 @@ html[data-theme] .site .force-dark {
 }
 
 html[data-theme="light"] .site {
-  --background: #f6f8fc;
-  --foreground: #0b1220;
-  --color-white: #0b1220;
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+  --color-white: #1d1d1f;
   --color-black: #ffffff;
 
   /* VS Code (Light+) */
-  --vs-bg: #f6f8fc;
+  --vs-bg: #f5f5f7;
   --vs-panel: #f3f3f3;
   --vs-terminal: #ffffff;
   --vs-terminal-bar: #f3f3f3;
@@ -138,7 +138,10 @@ html[data-theme="light"] .site {
 .site {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100dvh;
 }
 /* The original site rendered its "mono" and "sans" text in the body font. */
@@ -361,15 +364,7 @@ body {
   border: 1px solid var(--line);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* Motion stays on even when the OS asks for less (the owner's Windows has animations off). */
 
 /* =====================================================================
    Art side: cinema details
@@ -406,5 +401,126 @@ body {
   }
   .film-row .film-card:hover {
     box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* =====================================================================
+   Page transitions (React <ViewTransition>) and scroll reveals
+   ===================================================================== */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+::view-transition-old(.page) {
+  animation: 220ms cubic-bezier(0.4, 0, 1, 1) both page-out;
+}
+::view-transition-new(.page) {
+  animation: 560ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both page-in;
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+/* Sections rise and fade in as they enter the viewport (scroll-driven, compositor-only). */
+@supports (animation-timeline: view()) {
+  .reveal-sections > div > section > * {
+    animation: section-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+@keyframes section-rise {
+  from {
+    opacity: 0;
+    transform: translateY(56px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =====================================================================
+   Interaction: hand cursor everywhere you can click, press feedback on touch
+   ===================================================================== */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+a[href],
+button,
+[role="button"],
+[role="tab"],
+[role="radio"],
+[role="switch"],
+[role="slider"],
+summary,
+label[for],
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="file"],
+input[type="color"],
+input[type="date"],
+video[controls] {
+  cursor: pointer;
+}
+button:disabled,
+[aria-disabled="true"],
+select:disabled,
+input:disabled {
+  cursor: not-allowed;
+}
+a[href],
+button,
+[role="button"],
+[role="tab"],
+[role="radio"] {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Touch screens: a short press-down instead of hover states that would get stuck */
+@media (hover: none) {
+  a[href]:active,
+  button:not(:disabled):active,
+  [role="button"]:active,
+  [role="tab"]:active,
+  [role="radio"]:active {
+    transform: scale(0.97);
+    opacity: 0.85;
+    transition:
+      transform 120ms ease-out,
+      opacity 120ms ease-out;
+  }
+}
+/* Pointer screens: a gentle lift on buttons and pills */
+@media (hover: hover) and (pointer: fine) {
+  .site button:not(:disabled):not([role="tab"]):not([role="radio"]),
+  .admin button:not(:disabled) {
+    transition:
+      transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 240ms ease,
+      color 240ms ease,
+      opacity 240ms ease;
+  }
+  .site button:not(:disabled):not([role="tab"]):not([role="radio"]):not(.film-card):hover,
+  .admin button:not(:disabled):hover {
+    transform: translateY(-1px) scale(1.02);
   }
 }

@@ -334,7 +334,7 @@ try {
     if (existing) {
       skipped++;
       const set = {};
-      for (const k of ["title", "category", "published", "featured", "order"]) if (k in cur && cur[k] !== existing[k]) set[k] = cur[k];
+      for (const k of ["title", "category", "kind", "published", "featured", "order"]) if (k in cur && cur[k] !== existing[k]) set[k] = cur[k];
       if (Object.keys(set).length && !DRY) {
         await col.updateOne({ _id: existing._id }, { $set: { ...set, updatedAt: new Date().toISOString() } });
         log(`curation applied to ${p.id}: ${Object.keys(set).join(", ")}`);
@@ -400,13 +400,14 @@ try {
         title: cur.title ?? titleFrom(p.caption),
         caption: p.caption,
         category: cur.category ?? guessCategory(p.caption, hasVideo),
+        kind: cur.kind ?? (media[0]?.type === "video" ? "reel" : "photo"),
         media,
         thumb,
         date: p.date,
         order: cur.order ?? 0,
         featured: cur.featured ?? false,
         published: cur.published ?? false,
-        source: "instagram",
+        source: cur.source ?? "instagram",
         account: ACCOUNT,
         hashes: p.hashes,
         createdAt: now,

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { ViewTransition } from "react";
 import { ArtCinema, type CinemaItem } from "@/components/site/ArtCinema";
-import { FilmsSection } from "@/components/site/FilmsSection";
 import { getPublicArt, getPublicContent } from "@/lib/content";
 
 export const revalidate = 600;
@@ -18,10 +18,11 @@ export default async function ArtPage() {
   const [c, art] = await Promise.all([getPublicContent(), getPublicArt()]);
   const s = c.art;
   // Titles only: no dates or long captions on the Art side.
-  const items: CinemaItem[] = art.map((x) => ({ id: x.id, title: x.title, category: x.category, media: x.media, thumb: x.thumb }));
+  const items: CinemaItem[] = art.map((x) => ({ id: x.id, title: x.title, category: x.category, kind: x.kind, media: x.media, thumb: x.thumb }));
 
   return (
     // The Art side is a dark theatre in both themes.
+    <ViewTransition enter="page" exit="page" default="none">
     <div className="force-dark bg-black text-white">
       <ArtCinema
         kicker={s.kicker}
@@ -36,7 +37,7 @@ export default async function ArtPage() {
         categories={s.categories}
         items={items}
       />
-      <FilmsSection c={c} />
     </div>
+    </ViewTransition>
   );
 }

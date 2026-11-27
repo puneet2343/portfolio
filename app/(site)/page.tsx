@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { ViewTransition, type ReactNode } from "react";
 import { Contact } from "@/components/site/Contact";
 import Ecosystem from "@/components/site/Ecosystem";
 import Events from "@/components/site/Events";
@@ -39,7 +39,8 @@ export default async function Home() {
   };
 
   return (
-    <>
+    <ViewTransition enter="page" exit="page" default="none">
+    <div className="reveal-sections">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <Hero
         name={c.profile.name}
@@ -57,6 +58,7 @@ export default async function Home() {
         .map((s) => (
           <div key={s.id}>{RENDER[s.id]?.(c)}</div>
         ))}
-    </>
+    </div>
+    </ViewTransition>
   );
 }

@@ -261,6 +261,8 @@ export interface ArtItem {
   caption: string;
   /** id of an ArtCategory */
   category: string;
+  /** film (the short films), reel or photo */
+  kind?: "film" | "reel" | "photo";
   media: ArtMedia[];
   /** Thumbnail override; defaults to the first media's poster or image */
   thumb: string;
