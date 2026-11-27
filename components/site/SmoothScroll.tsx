@@ -27,22 +27,20 @@ export function scrollToId(id: string, offset = -84) {
 
 /**
  * Lenis smooth scroll with the original site's feel, driven by the GSAP ticker so
- * ScrollTrigger pins stay in sync. Off when the visitor prefers reduced motion.
+ * ScrollTrigger pins stay in sync. Stays on with reduced motion, just snappier.
  */
 export default function SmoothScroll() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduce.matches) return;
+    // Lenis stays on even with "reduce motion" (Windows with animations off reports that), the owner wants it.
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const lenis = new Lenis({
-      lerp: 0.04,
-      duration: 1.8,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: reduce ? 0.12 : 0.08,
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 0.7,
+      wheelMultiplier: 1,
       touchMultiplier: 1.5,
       infinite: false,
       autoRaf: false,

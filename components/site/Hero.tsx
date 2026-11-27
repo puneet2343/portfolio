@@ -167,7 +167,7 @@ const ActiveCodeWindow = memo(
     const displayCode = activeTab === "developer.ts" && isTyping ? typedCode : files[activeTab];
 
     return (
-      <div data-lenis-prevent className="min-h-full h-full overflow-x-auto overflow-y-auto w-full no-scrollbar pb-10">
+      <div className="min-h-full h-full overflow-x-auto overflow-y-auto w-full no-scrollbar pb-10">
         <CodeRenderer code={displayCode} lang={activeTab.split(".")[1]} />
       </div>
     );
@@ -581,7 +581,7 @@ export default function Hero(props: HeroProps) {
                   </button>
                 </div>
               </div>
-              <div ref={scrollRef} data-lenis-prevent className="p-3 md:p-4 font-mono text-[10px] sm:text-[11px] md:text-[12px] flex-1 overflow-y-auto custom-scrollbar">
+              <div ref={scrollRef} className="p-3 md:p-4 font-mono text-[10px] sm:text-[11px] md:text-[12px] flex-1 overflow-y-auto custom-scrollbar">
                 <div className="text-[var(--vs-dim)] mb-3 select-none">
                   Microsoft Windows [Version 10.0.19045] <br /> (c) Microsoft Corporation. All rights reserved.
                 </div>
