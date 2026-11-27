@@ -1,0 +1,11 @@
+node_modules
+.next
+data
+public/uploads
+_screenshots
+.env
+.env.*
+!.env.example
+AGENTS.md
+CLAUDE.md
+tsconfig.tsbuildinfo
